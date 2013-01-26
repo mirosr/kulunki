@@ -1,4 +1,4 @@
-Kulunki [![Build Status](https://travis-ci.org/mirosr/kulunki.png)](https://travis-ci.org/mirosr/kulunki)
+Kulunki [![Build Status](https://travis-ci.org/mirosr/kulunki.png)](https://travis-ci.org/mirosr/kulunki) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/mirosr/kulunki)
 =======
 
 Description
