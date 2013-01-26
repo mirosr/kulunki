@@ -1,4 +1,4 @@
-Kulunki
+Kulunki [![Build Status](https://travis-ci.org/mirosr/kulunki.png)](https://travis-ci.org/mirosr/kulunki)
 =======
 
 Description
