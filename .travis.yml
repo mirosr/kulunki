@@ -1,0 +1,16 @@
+language: ruby
+bundler_args: --without development production
+rvm:
+  - 1.9.3
+  - ruby-head
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+env:
+  - DB=postgresql
+  - DB=mysql
+  - DB=sqlite
+before_script:
+ - cp config/database.yml.travis config/database.yml
+ - RAILS_ENV=test bundle exec rake db:create
+ - RAILS_ENV=test bundle exec rake db:migrate

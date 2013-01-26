@@ -1,5 +1,9 @@
 source 'https://rubygems.org'
 
+unless ENV['TRAVIS']
+  ruby '1.9.3'
+end
+
 gem 'rails', '3.2.11'
 
 gem 'pg'
@@ -32,4 +36,13 @@ group :test do
   gem 'capybara', '~> 2.0.2'
   gem 'database_cleaner', '~> 0.9.1'
   gem 'launchy', '~> 2.1.2'
+
+  if ENV['TRAVIS']
+    if ENV['DB'] == 'mysql'
+      gem 'mysql2', platform: :ruby
+    end
+    if ENV['DB'] == 'sqlite'
+      gem 'sqlite3', platform: :ruby
+    end
+  end
 end

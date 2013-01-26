@@ -1,0 +1,23 @@
+postgresql: &postgresql
+  adapter: postgresql
+  username: postgres
+  database: kulunki_<%= Rails.env %>
+  min_messages: ERROR
+
+mysql: &mysql
+  adapter: mysql2
+  username: root
+  database: kulunki_<%= Rails.env %>
+
+sqlite: &sqlite
+  adapter: sqlite3
+  database: db/<%= Rails.env %>.sqlite3
+
+defaults: &defaults
+  pool: 5
+  timeout: 5000
+  host: localhost
+  <<: *<%= ENV['DB'] || "postgresql" %>
+
+test:
+  <<: *defaults
