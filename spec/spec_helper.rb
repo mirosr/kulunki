@@ -50,8 +50,11 @@ Spork.prefork do
     config.filter_run focus: true
     config.run_all_when_everything_filtered = true
   
-    # Include factory_girl syntax to simplify factories calls
+    # Include factory_girl's syntax to simplify factories calls
     config.include FactoryGirl::Syntax::Methods
+
+    # Include sorcery's login_user and logout_user helpers
+    config.include Sorcery::TestHelpers::Rails
   end
 end
 

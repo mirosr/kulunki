@@ -46,3 +46,6 @@ group :test do
     end
   end
 end
+
+# Auth
+gem 'sorcery', '~> 0.8.1'
