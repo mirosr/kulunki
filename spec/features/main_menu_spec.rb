@@ -6,10 +6,10 @@ feature 'Main menu' do
 
     within 'nav.main' do
       expect(page).to have_link('Dashboard', href: dashboard_path)
-      expect(page).to have_content 'Expenditures'
-      expect(page).to have_content 'Groups'
-      expect(page).to have_content 'Reports'
-      expect(page).to have_content 'Admin Panel'
+      expect(page).to have_text 'Expenditures'
+      expect(page).to have_text 'Groups'
+      expect(page).to have_text 'Reports'
+      expect(page).to have_text 'Admin Panel'
     end
   end
 end

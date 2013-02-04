@@ -5,9 +5,9 @@ feature 'Breadcrumb Navigation' do
     visit root_path
 
     within 'header.page .breadcrumb_nav' do
-      expect(page).to have_content 'Kulunki'
-      expect(page).to have_content 'Household Name'
-      expect(page).to have_content 'Current Period'
+      expect(page).to have_text 'Kulunki'
+      expect(page).to have_text 'Household Name'
+      expect(page).to have_text 'Current Period'
     end
   end
 end
