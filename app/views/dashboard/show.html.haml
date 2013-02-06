@@ -1,3 +1,6 @@
 - content_for :content_title do
   %header.content
     %h1 Dashboard
+
+- if notice.present?
+  .notice= notice
