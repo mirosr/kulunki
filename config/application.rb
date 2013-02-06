@@ -66,7 +66,12 @@ module Kulunki
     config.assets.version = '1.0'
 
     # Make use of sass syntax over scss
-    config.sass.preferred_syntax = :sass
+    # config.sass.preferred_syntax = :sass
+    if Rails.configuration.respond_to?(:sass)
+      Rails.configuration.sass.tap do |config|
+        config.preferred_syntax = :sass
+      end
+    end
 
     # Configure generators to use third-party gems
     config.generators do |g|
