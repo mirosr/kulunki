@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 feature 'User signup' do
-  scenario 'A user sees the sign up form' do
+  scenario 'An user sees the sign up form' do
     visit signup_path
 
     within 'header.page' do
@@ -35,5 +35,21 @@ feature 'User signup' do
     expect{ click_button 'Sign Up' }.not_to change{ User.count }
     expect(page).not_to have_text 'Welcome to Kulunki'
     expect(page).to have_text 'The following errors prevent your user of being saved:'
+  end
+end
+
+feature 'User signin' do
+  scenario 'An user sees the sign in form' do
+    visit signin_path
+
+    within 'header.page' do
+      expect(page).to have_text 'Kulunki'
+      expect(page).to have_text 'Please sign in to continue'
+    end
+    within 'form#new_session' do
+      expect(page).to have_field 'Username or Email'
+      expect(page).to have_field 'Password'
+      expect(page).to have_button 'Sign In'
+    end
   end
 end

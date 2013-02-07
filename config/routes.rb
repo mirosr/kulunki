@@ -3,6 +3,7 @@ Kulunki::Application.routes.draw do
   
   # Auth
   get 'signup' => 'users#new'
+  get 'signin' => 'sessions#new'
 
   # Users
   resources :users
