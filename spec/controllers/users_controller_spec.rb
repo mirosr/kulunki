@@ -1,13 +1,17 @@
 require 'spec_helper'
 
 describe UsersController do
+  def expect_to_render_new_template
+    expect(response).to be_success
+    expect(response).to render_template 'layouts/auth'
+    expect(response).to render_template :new
+  end
+
   describe 'GET #new' do
     before(:each) { get :new }
 
     it 'renders the :new template with auth layout' do
-      expect(response).to be_success
-      expect(response).to render_template 'layouts/auth'
-      expect(response).to render_template :new
+      expect_to_render_new_template
     end
 
     it 'initializes a new user' do
@@ -23,22 +27,25 @@ describe UsersController do
       User.should_receive(:new).once.with(instance_of(HashWithIndifferentAccess)){ @user }
     end
     
-    it 'creates a new user with valid params' do
-      @user.should_receive(:save).once{ true }
-      
-      post :create, user: {}
+    context 'when form params are valid' do
+      it 'creates a new user' do
+        @user.should_receive(:save).once{ true }
+        
+        post :create, user: {}
 
-      expect(response).to redirect_to dashboard_path
-      expect(flash[:notice]).not_to be_blank
+        expect(response).to redirect_to dashboard_path
+        expect(flash[:notice]).not_to be_blank
+      end
     end
 
-    it 're-renders the :new template when there are errors' do
-      @user.should_receive(:save).once{ false }
-      
-      post :create, user: {}
+    context 'when form params are not valid' do
+      it 're-renders the :new template' do
+        @user.should_receive(:save).once{ false }
+        
+        post :create, user: {}
 
-      expect(response).to be_success
-      expect(response).to render_template :new
+        expect_to_render_new_template
+      end
     end
   end
 end

@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  layout 'auth', only: :new
+  layout 'auth', only: [:new, :create]
 
   def new
     @user = User.new
