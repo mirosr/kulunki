@@ -58,7 +58,7 @@ feature 'User sign in' do
   end
 
   context 'When user credentials are valid' do
-    before(:each) do
+    background do
       create(:user, username: 'john', password: 'john123',
         email: 'john@example.com')
 
