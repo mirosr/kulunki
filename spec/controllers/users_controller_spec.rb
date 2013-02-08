@@ -30,6 +30,7 @@ describe UsersController do
     context 'when form params are valid' do
       it 'creates a new user' do
         @user.should_receive(:save).once{ true }
+        @controller.should_receive(:auto_login).once.with(@user)
         
         post :create, user: {}
 

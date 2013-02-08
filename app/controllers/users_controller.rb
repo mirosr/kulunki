@@ -8,6 +8,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
+      auto_login(@user)
       redirect_to dashboard_path, notice: 'Welcome to Kulunki, john.'
     else
       render :new
