@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 feature 'Home page' do
-  context 'when user is not signed in' do
+  context 'When user is not signed in' do
     scenario 'Redirecting user to sign in' do
       visit root_path
 

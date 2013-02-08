@@ -17,7 +17,7 @@ feature 'User sign up' do
     end
   end
 
-  context 'when form params are valid' do
+  context 'When form params are valid' do
     scenario 'An user signs up to the system' do
       visit signup_path
 
@@ -31,7 +31,7 @@ feature 'User sign up' do
     end
   end
 
-  context 'when form params are not valid' do
+  context 'When form params are not valid' do
     scenario 'An user sees an alert messege' do
       visit signup_path
 
@@ -57,7 +57,7 @@ feature 'User sign in' do
     end
   end
 
-  context 'when user credentials are valid' do
+  context 'When user credentials are valid' do
     before(:each) do
       create(:user, username: 'john', password: 'john123',
         email: 'john@example.com')
@@ -84,7 +84,7 @@ feature 'User sign in' do
     end
   end
 
-  context 'when user credentials are not valid' do
+  context 'When user credentials are not valid' do
     scenario 'An user sees an alert message' do
       visit signin_path
 
