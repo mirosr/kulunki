@@ -1,15 +1,10 @@
 require 'spec_helper'
 
 feature 'Main menu' do
+  include AuthHelper
+
   scenario 'Showing the main menu' do
-    create(:user, username: 'john', password: 'john123',
-      email: 'john@example.com')
-
-    visit root_path
-
-    fill_in 'Username or Email', with: 'john'
-    fill_in 'Password', with: 'john123'
-    click_button 'Sign In'
+    visit_protected root_path
 
     within 'nav.main' do
       expect(page).to have_link('Dashboard', href: dashboard_path)

@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 feature 'Home page' do
+  include AuthHelper
+
   context 'When user is not signed in' do
     scenario 'Redirecting user to sign in' do
       visit root_path
@@ -11,14 +13,7 @@ feature 'Home page' do
   end
 
   scenario 'Showing the dashboard' do
-    create(:user, username: 'john', password: 'john123',
-      email: 'john@example.com')
-
-    visit root_path
-
-    fill_in 'Username or Email', with: 'john'
-    fill_in 'Password', with: 'john123'
-    click_button 'Sign In'
+    visit_protected root_path
 
     expect(page).to have_text 'Dashboard'
   end
