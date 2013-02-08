@@ -9,4 +9,17 @@ module AuthHelper
     fill_in 'Password', with: password
     click_button 'Sign In'
   end
+
+  shared_examples 'a protected page' do |path_as_sym|
+    let(:path) { send(path_as_sym) }
+
+    context 'when user is not signed in' do
+      it 'redirects the user to sign in' do
+        visit path
+
+        expect(current_path).to eq(signin_path)
+        expect(page).to have_css 'form#new_session'
+      end
+    end
+  end
 end
