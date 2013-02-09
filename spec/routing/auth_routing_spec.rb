@@ -15,4 +15,9 @@ describe 'Auth routes' do
     expect(post: '/signin').to route_to(
       controller: 'sessions', action: 'create')
   end
+
+  it 'routes to /signout' do
+    expect(get: '/signout').to route_to(
+      controller: 'sessions', action: 'destroy')
+  end
 end
