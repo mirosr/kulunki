@@ -27,7 +27,7 @@ feature 'User sign up' do
       fill_in 'Confirm Password', with: 'john123'
 
       expect{ click_button 'Sign Up' }.to change{ User.count }.by 1
-      expect(page).to have_text 'Welcome to Kulunki, john.'
+      expect(page).to have_text 'Welcome to Kulunki, john'
     end
   end
 

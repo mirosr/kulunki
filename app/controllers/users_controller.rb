@@ -9,7 +9,8 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     if @user.save
       auto_login(@user)
-      redirect_to dashboard_path, notice: 'Welcome to Kulunki, john.'
+      redirect_to dashboard_path,
+        notice: "Welcome to Kulunki, #{@user.username}"
     else
       render :new
     end

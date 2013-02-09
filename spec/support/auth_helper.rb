@@ -1,7 +1,21 @@
 module AuthHelper
   def visit_protected(path)
-    password = FactoryGirl.generate(:secure_password)
+    password = gen_secure_pass
     user = create(:user, password: password)
+    
+    visit path
+
+    fill_in 'Username or Email', with: user.username
+    fill_in 'Password', with: password
+    click_button 'Sign In'
+  end
+
+  def visit_protected_as(path, create_params)
+    if create_params[:password].nil?
+      create_params[:password] = gen_secure_pass
+    end
+    password = create_params[:password]
+    user = create(:user, create_params)
     
     visit path
 
@@ -21,5 +35,11 @@ module AuthHelper
         expect(page).to have_css 'form#new_session'
       end
     end
+  end
+
+  private
+  
+  def gen_secure_pass
+    FactoryGirl.generate(:secure_password)
   end
 end
