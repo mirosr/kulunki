@@ -9,7 +9,7 @@ feature 'Page Header' do
     expect(page).to have_text 'john'
   end
 
-  scenario 'Showing the sigout link' do
+  scenario 'Showing the signout link' do
     visit_protected root_path
 
     expect(page).to have_link('Sign Out', href: signout_path)

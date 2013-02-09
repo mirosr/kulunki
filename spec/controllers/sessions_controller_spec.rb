@@ -55,4 +55,26 @@ describe SessionsController do
       end
     end
   end
+
+  describe 'GET #destroy' do
+    it 'destroys the user session' do
+      @controller.should_receive(:logout)
+
+      get :destroy
+
+      expect(session[:user_id]).to be_nil
+    end
+
+    it 'redirects to root url' do
+      get :destroy
+
+      expect(response).to redirect_to root_url
+    end
+
+    it 'sets a notice message' do
+      get :destroy
+
+      expect(flash[:notice]).not_to be_blank
+    end
+  end
 end
