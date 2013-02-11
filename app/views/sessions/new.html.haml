@@ -8,4 +8,6 @@
 = form_tag signin_path, id: :new_session do
   = text_field_tag :username, nil, placeholder: 'Username or Email'
   = password_field_tag :password, nil, placeholder: 'Password'
+  = check_box_tag :remember_me
+  = label_tag :remember_me, 'Remember Me'
   = submit_tag 'Sign In'

@@ -54,6 +54,25 @@ describe SessionsController do
         expect(flash[:alert]).not_to be_blank
       end
     end
+
+    context 'when the user selects remember me' do
+      before(:each) do
+        @controller.stub(:logged_in?){ true }
+      end
+
+      it 'checks the user credentials' do
+        @controller.should_receive(:login).once.with('john', 'john123', '1')
+        @controller.should_receive(:logged_in?).once
+
+        post :create, username: 'john', password: 'john123', remember_me: '1'
+      end
+
+      # it 'sets the remember_me_token cookie' do
+      #   post :create, username: 'john', password: 'john123', remember_me: '1'
+
+      #   expect(session[:remember_me_token]).not_to be_blank
+      # end
+    end
   end
 
   describe 'GET #destroy' do

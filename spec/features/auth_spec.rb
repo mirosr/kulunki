@@ -53,6 +53,7 @@ feature 'User sign in' do
     within 'form#new_session' do
       expect(page).to have_field 'Username or Email'
       expect(page).to have_field 'Password'
+      expect(page).to have_field 'Remember Me'
       expect(page).to have_button 'Sign In'
     end
   end
