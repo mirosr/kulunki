@@ -56,22 +56,22 @@ describe SessionsController do
     end
 
     context 'when the user selects remember me' do
-      before(:each) do
-        @controller.stub(:logged_in?){ true }
-      end
-
       it 'checks the user credentials' do
+        @controller.stub(:logged_in?){ true }
+
         @controller.should_receive(:login).once.with('john', 'john123', '1')
         @controller.should_receive(:logged_in?).once
 
         post :create, username: 'john', password: 'john123', remember_me: '1'
       end
 
-      # it 'sets the remember_me_token cookie' do
-      #   post :create, username: 'john', password: 'john123', remember_me: '1'
+      it 'sets the remember_me_token cookie' do
+        create(:user, username: 'john', password: 'john123')
 
-      #   expect(session[:remember_me_token]).not_to be_blank
-      # end
+        post :create, username: 'john', password: 'john123', remember_me: '1'
+
+        expect(cookies[:remember_me_token]).not_to be_blank
+      end
     end
   end
 
