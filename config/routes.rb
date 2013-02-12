@@ -8,7 +8,8 @@ Kulunki::Application.routes.draw do
   get 'signout' => 'sessions#destroy'
 
   # Password
-  get 'password/reset' => 'password#reset'
+  get 'password/reset' => 'password#edit'
+  post 'password/reset' => 'password#update'
 
   # Users
   resources :users

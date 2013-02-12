@@ -10,4 +10,8 @@ class User < ActiveRecord::Base
     on: :create
   validates :password, confirmation: true, length: { minimum: 6 },
     if: :password
+
+  def self.valid_email?(value)
+    value =~ /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
+  end
 end

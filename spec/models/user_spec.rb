@@ -39,4 +39,24 @@ describe User do
       it { should validate_confirmation_of(:password) }
     end
   end
+
+  describe '.valid_email?' do
+    context 'when input param matches the regexp' do
+      it 'returns true' do
+        expect(User.valid_email?('john@example.com')).to be_true
+      end
+    end
+
+    context 'when input param does not match the regexp' do
+      it 'returns false' do
+        expect(User.valid_email?('john')).to be_false
+      end
+    end
+
+    context 'when input param is blank' do
+      it 'returns false' do
+        expect(User.valid_email?('')).to be_false
+      end
+    end
+  end
 end
