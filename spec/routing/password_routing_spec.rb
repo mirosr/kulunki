@@ -17,7 +17,7 @@ describe 'Password routes' do
   end
 
   it 'routes to /password/change with post method' do
-    expect(post: '/password/change').to route_to(
-      controller: 'password', action: 'update')
+    expect(put: '/password/change/token_value').to route_to(
+      controller: 'password', action: 'update', token: 'token_value')
   end
 end
