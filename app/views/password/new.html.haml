@@ -1,0 +1,12 @@
+- content_for :page_header do
+  %h1
+    Kulunki » Please enter email to reset your password
+
+- if notice.present?
+  .notice= notice
+- if alert.present?
+  .alert= alert
+
+= form_tag reset_password_path, id: :reset_password do
+  = email_field_tag :email, nil, placeholder: 'Email'
+  = submit_tag 'Reset Password'
