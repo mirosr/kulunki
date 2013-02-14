@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 feature 'Password Reset' do
+  include EmailHelper
+
+  background do
+    clear_email_queue
+  end
+
   scenario 'An user sees the password reset form' do
     visit reset_password_path
 
@@ -15,14 +21,17 @@ feature 'Password Reset' do
   end
 
   context 'When the given email is valid and existing' do
-    scenario 'A password reset email is sent to the user' do
-      create(:user, email: 'john@example.com')
+    scenario 'Sending reset password instructions to the user' do
+      user = create(:user, email: 'john@example.com')
 
       visit reset_password_path
 
       fill_in 'Email', with: 'john@example.com'
       click_button 'Reset Password'
 
+      expect(last_email).not_to be_nil
+      expect(last_email.to).to eq([user.email])
+      expect(last_email.body).to include(user.reset_password_token)
       expect(page).to have_text 'An email with instructions was sent to you'
     end
   end
@@ -35,6 +44,7 @@ feature 'Password Reset' do
       click_button 'Reset Password'
 
       expect(page).to have_text 'The email address you provided was invalid. Please try again.'
+      expect(last_email).to be_nil
     end
   end
   
@@ -44,10 +54,11 @@ feature 'Password Reset' do
 
       visit reset_password_path
 
-      fill_in 'Email', with: 'john@example.com'
+      fill_in 'Email', with: 'nonexisting@example.com'
       click_button 'Reset Password'
 
       expect(page).to have_text 'An email with instructions was sent to you'
+      expect(last_email).to be_nil
     end
   end
 end

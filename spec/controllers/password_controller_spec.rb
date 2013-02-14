@@ -29,17 +29,27 @@ describe PasswordController do
     end
 
     context 'when the email is valid and existing' do
+      let(:user_john) { build(:user, email: 'john@example.com') }
+
       before(:each) do
-        User.stub(:find_by_email){ true }
+        User.stub(:find_by_email){ user_john }
+      end
+
+      it 'sends reset password instructions' do
+        user_john.should_receive(:deliver_reset_password_instructions!).once
 
         post :create, email: 'john@example.com'
       end
 
       it 'redirects to password url' do
+        post :create, email: 'john@example.com'
+
         expect(response).to redirect_to reset_password_url
       end
 
       it 'sets a notice message' do
+        post :create, email: 'john@example.com'
+
         expect(flash[:notice]).not_to be_blank
       end
     end
@@ -62,7 +72,7 @@ describe PasswordController do
 
     context 'when the email is not existing' do
       before(:each) do
-        User.stub(:find_by_email){ false }
+        User.stub(:find_by_email){ nil }
 
         post :create, email: 'nonexisting@example.com'
       end

@@ -6,7 +6,8 @@ class PasswordController < ApplicationController
 
   def create
     if User.valid_email?(params[:email])
-      User.find_by_email(params[:email])
+      user = User.find_by_email(params[:email])
+      user.deliver_reset_password_instructions! if user.present?
       redirect_to reset_password_url, notice: 'An email with instructions was sent to you'
     else
       flash.now.alert = 'The email address you provided was invalid. Please try again.'
