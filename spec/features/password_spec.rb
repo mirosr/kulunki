@@ -31,7 +31,8 @@ feature 'Password Reset' do
 
       expect(last_email).not_to be_nil
       expect(last_email.to).to eq([user.email])
-      expect(last_email.body).to include(user.reset_password_token)
+      expect(last_email.body).to include(
+        change_password_url(user.reset_password_token))
       expect(page).to have_text 'An email with instructions was sent to you'
     end
   end

@@ -15,8 +15,9 @@ describe UserMailer do
       expect(mail.body.encoded).to include(user.username)
     end
 
-    it 'sends the reset password token' do
-      expect(mail.body.encoded).to include(user.reset_password_token)
+    it 'sends the change password url' do
+      expect(mail.body.encoded).to include(
+        change_password_url(user.reset_password_token))
     end
   end
 end
