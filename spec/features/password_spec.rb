@@ -29,8 +29,10 @@ feature 'Password Reset' do
       fill_in 'Email', with: 'john@example.com'
       click_button 'Reset Password'
 
+      user.reload
+
       expect(last_email).not_to be_nil
-      expect(last_email.to).to eq([user.email])
+      expect(last_email.to).to eq(['john@example.com'])
       expect(last_email.body).to include(
         change_password_url(user.reset_password_token))
       expect(page).to have_text 'An email with instructions was sent to you'
@@ -65,17 +67,40 @@ feature 'Password Reset' do
 end
 
 feature 'Password Change' do
-  scenario 'An user sees the password change form' do
-    visit change_password_path('token_value')
+  context 'When the given token is valid' do
+    scenario 'An user sees the password change form' do
+      user = create(:user_with_reset_password_token)
 
-    within 'header.page' do
-      expect(page).to have_text 'Kulunki'
-      expect(page).to have_text 'Please enter a new password'
+      visit change_password_path(user.reset_password_token)
+
+      within 'header.page' do
+        expect(page).to have_text 'Kulunki'
+        expect(page).to have_text 'Please enter a new password'
+      end
+      within 'form#change_password' do
+        expect(page).to have_field 'New Password'
+        expect(page).to have_field 'Confirm New Password'
+        expect(page).to have_button 'Change Password'
+      end
     end
-    within 'form#change_password' do
-      expect(page).to have_field 'New Password'
-      expect(page).to have_field 'Confirm New Password'
-      expect(page).to have_button 'Change Password'
+  end
+
+  context 'When the given token is not valid' do
+    scenario 'Showing the sign in form' do
+      visit change_password_path('invalid_token')
+
+      expect(current_path).to eq(signin_path)
+    end
+  end
+
+  context 'When the given token has expired' do
+    scenario 'Showing reset password form with an alert message' do
+      user = create(:user_with_expired_reset_password_token)
+
+      visit change_password_path(user.reset_password_token)
+
+      expect(current_path).to eq(reset_password_path)
+      expect(page).to have_text 'Sorry, this reset password token has expited. Please request a new one.'
     end
   end
 end

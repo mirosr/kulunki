@@ -17,13 +17,13 @@ describe PasswordController do
 
   describe 'POST #create' do
     it 'checks if the email is valid' do
-      User.should_receive(:valid_email?).with('john@example.com')
+      User.should_receive(:valid_email?).with('john@example.com').once
 
       post :create, email: 'john@example.com'
     end
 
     it 'checks if the email is existing' do
-      User.should_receive(:find_by_email).with('john@example.com')
+      User.should_receive(:find_by_email).with('john@example.com').once
 
       post :create, email: 'john@example.com'
     end
@@ -88,18 +88,56 @@ describe PasswordController do
   end
 
   describe 'GET #edit' do
-    it 'renders the :edit template with auth layout' do
-      get :edit, token: 'token_value'
+    it 'checks if the reset password token is valid' do
+      User.should_receive(:load_from_reset_password_token).with('token_value').once
 
-      expect(response).to be_success
-      expect(response).to render_template 'layouts/auth'
-      expect(response).to render_template :edit
+      get :edit, token: 'token_value'
     end
 
-    it 'sets token param' do
-      get :edit, token: 'token_value'
+    context 'when reset password token is valid' do
+      it 'sets token param' do
+        get :edit, token: 'valid_token'
 
-      expect(controller.params[:token]).to eq('token_value')
+        expect(controller.params[:token]).to eq('valid_token')
+      end
+
+      it 'renders the :edit template with auth layout' do
+        user_with_token = build(:user)
+        User.stub(:load_from_reset_password_token) { user_with_token }
+
+        get :edit, token: 'valid_token'
+
+        expect(response).to be_success
+        expect(response).to render_template 'layouts/auth'
+        expect(response).to render_template :edit
+      end
+    end
+
+    context 'when reset password token is not valid' do
+      it 'redirects to sign in url' do
+        User.stub(:load_from_reset_password_token) { nil }
+
+        get :edit, token: 'invalid_token'
+
+        expect(response).to redirect_to(signin_url)
+      end
+    end
+
+    context 'when reset password token has expired' do
+      before(:each) do
+        User.stub(:load_from_reset_password_token) { nil }
+        User.stub(:reset_password_token_expired?) { true }
+
+        get :edit, token: 'expired_token'
+      end
+
+      it 'redirects to password url' do
+        expect(response).to redirect_to reset_password_url
+      end
+
+      it 'sets an alert message' do
+        expect(flash[:alert]).not_to be_blank
+      end
     end
   end
 end

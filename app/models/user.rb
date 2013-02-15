@@ -12,6 +12,15 @@ class User < ActiveRecord::Base
     if: :password
 
   def self.valid_email?(value)
-    value =~ /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
+    !!(value =~ /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)
+  end
+
+  def self.reset_password_token_expired?(value)
+    user = find_by_reset_password_token(value)
+    if user.present? && !user.reset_password_token_expires_at.nil?
+      user.reset_password_token_expires_at < Time.now.in_time_zone
+    else
+      false
+    end
   end
 end

@@ -43,19 +43,57 @@ describe User do
   describe '.valid_email?' do
     context 'when input param matches the regexp' do
       it 'returns true' do
-        expect(User.valid_email?('john@example.com')).to be_true
+        return_value = User.valid_email?('john@example.com')
+
+        expect(return_value).to be_a(TrueClass)
+        expect(return_value).to be_true
       end
     end
 
     context 'when input param does not match the regexp' do
       it 'returns false' do
-        expect(User.valid_email?('john')).to be_false
+        return_value = User.valid_email?('john')
+
+        expect(return_value).to be_a(FalseClass)
+        expect(return_value).to be_false
       end
     end
 
     context 'when input param is blank' do
       it 'returns false' do
-        expect(User.valid_email?('')).to be_false
+        return_value = User.valid_email?('')
+
+        expect(return_value).to be_a(FalseClass)
+        expect(return_value).to be_false
+      end
+    end
+  end
+
+  describe '.reset_password_token_expired?' do
+    context 'when reset_password_token_expires_at is in the past' do
+      it 'returns true' do
+        user = create(:user_with_expired_reset_password_token)
+
+        expect(User.reset_password_token_expired?(
+          user.reset_password_token)).to be_true
+      end
+    end
+
+    context 'when reset_password_token_expires_at is in the future' do
+      it 'returns false' do
+        user = create(:user_with_reset_password_token)
+
+        expect(User.reset_password_token_expired?(
+          user.reset_password_token)).to be_false
+      end
+    end
+
+    context 'when reset_password_token_expires_at is nil' do
+      it 'returns false' do
+        user = create(:user)
+
+        expect(User.reset_password_token_expired?(
+          user.reset_password_token)).to be_false
       end
     end
   end
