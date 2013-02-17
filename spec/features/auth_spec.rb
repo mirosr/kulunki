@@ -1,8 +1,13 @@
 require 'spec_helper'
 
 feature 'User sign up' do
+  def visit_signup_path
+    visit signin_path
+    click_link 'Sign Up'
+  end
+
   scenario 'An user sees the sign up form' do
-    visit signup_path
+    visit_signup_path
 
     within 'header.page' do
       expect(page).to have_text 'Kulunki'
@@ -19,7 +24,7 @@ feature 'User sign up' do
 
   context 'When form params are valid' do
     scenario 'An user signs up to the system' do
-      visit signup_path
+      visit_signup_path
 
       fill_in 'Username', with: 'john'
       fill_in 'Email', with: 'john@example.com'
@@ -33,7 +38,7 @@ feature 'User sign up' do
 
   context 'When form params are not valid' do
     scenario 'An user sees an alert messege' do
-      visit signup_path
+      visit_signup_path
 
       expect{ click_button 'Sign Up' }.not_to change{ User.count }
       expect(page).not_to have_text 'Welcome to Kulunki'
@@ -54,6 +59,8 @@ feature 'User sign in' do
       expect(page).to have_field 'Username or Email'
       expect(page).to have_field 'Password'
       expect(page).to have_field 'Remember Me'
+      expect(page).to have_link 'Forgot password?', href: reset_password_path
+      expect(page).to have_link 'Sign Up', href: signup_path
       expect(page).to have_button 'Sign In'
     end
   end
