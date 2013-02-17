@@ -22,28 +22,24 @@ feature 'User sign up' do
     end
   end
 
-  context 'When form params are valid' do
-    scenario 'An user signs up to the system' do
-      visit_signup_path
+  scenario 'An user signs up to the system successfully' do
+    visit_signup_path
 
-      fill_in 'Username', with: 'john'
-      fill_in 'Email', with: 'john@example.com'
-      fill_in 'Password', with: 'john123'
-      fill_in 'Confirm Password', with: 'john123'
+    fill_in 'Username', with: 'john'
+    fill_in 'Email', with: 'john@example.com'
+    fill_in 'Password', with: 'john123'
+    fill_in 'Confirm Password', with: 'john123'
 
-      expect{ click_button 'Sign Up' }.to change{ User.count }.by 1
-      expect(page).to have_text 'Welcome to Kulunki, john'
-    end
+    expect{ click_button 'Sign Up' }.to change{ User.count }.by 1
+    expect(page).to have_text 'Welcome to Kulunki, john'
   end
 
-  context 'When form params are not valid' do
-    scenario 'An user sees an alert messege' do
-      visit_signup_path
+  scenario 'Show an alert messege when form params are invalid' do
+    visit_signup_path
 
-      expect{ click_button 'Sign Up' }.not_to change{ User.count }
-      expect(page).not_to have_text 'Welcome to Kulunki'
-      expect(page).to have_text 'The following errors prevent your user of being saved:'
-    end
+    expect{ click_button 'Sign Up' }.not_to change{ User.count }
+    expect(page).not_to have_text 'Welcome to Kulunki'
+    expect(page).to have_text 'The following errors prevent your user of being saved:'
   end
 end
 
@@ -65,41 +61,38 @@ feature 'User sign in' do
     end
   end
 
-  context 'When user credentials are valid' do
-    background do
-      create(:user, username: 'john', password: 'john123',
-        email: 'john@example.com')
+  scenario 'An user signs in successfully with username and password' do
+    create(:user, username: 'john', password: 'john123')
 
-      visit signin_path
-    end
+    visit signin_path
 
-    scenario 'An user signs in with username and password' do
-      fill_in 'Username or Email', with: 'john'
-      fill_in 'Password', with: 'john123'
-      click_button 'Sign In'
+    fill_in 'Username or Email', with: 'john'
+    fill_in 'Password', with: 'john123'
+    click_button 'Sign In'
 
-      expect(current_path).to eq(dashboard_path)
-      expect(page).to have_text 'Signed in successfully'
-    end
-
-    scenario 'An user signs in with email and password' do
-      fill_in 'Username or Email', with: 'john@example.com'
-      fill_in 'Password', with: 'john123'
-      click_button 'Sign In'
-
-      expect(current_path).to eq(dashboard_path)
-      expect(page).to have_text 'Signed in successfully'
-    end
+    expect(current_path).to eq(dashboard_path)
+    expect(page).to have_text 'Signed in successfully'
   end
 
-  context 'When user credentials are not valid' do
-    scenario 'An user sees an alert message' do
-      visit signin_path
+  scenario 'An user signs in successfully with email and password' do
+    create(:user, email: 'john@example.com', password: 'john123')
 
-      click_button 'Sign In'
+    visit signin_path
 
-      expect(page).not_to have_text 'Signed in successfully'
-      expect(page).to have_text 'Username or email or password was incorrect'
-    end
+    fill_in 'Username or Email', with: 'john@example.com'
+    fill_in 'Password', with: 'john123'
+    click_button 'Sign In'
+
+    expect(current_path).to eq(dashboard_path)
+    expect(page).to have_text 'Signed in successfully'
+  end
+
+  scenario 'Show an alert message when entered credentials are invalid' do
+    visit signin_path
+
+    click_button 'Sign In'
+
+    expect(page).not_to have_text 'Signed in successfully'
+    expect(page).to have_text 'Username or email or password was incorrect'
   end
 end
