@@ -97,4 +97,44 @@ describe User do
       end
     end
   end
+
+  describe '#admin?' do
+    context 'when the user role is admin' do
+      it 'returns true' do
+        expect(build(:user, :admin).admin?).to be_true
+      end
+    end
+
+    context 'when the user role is not admin' do
+      it 'returns false' do
+        expect(build(:user).admin?).to be_false
+      end
+    end
+  end
+
+  describe '#needs_to_be_admin?' do
+    context 'when there are no users yet' do
+      it 'returns true' do
+        expect(User.new.needs_to_be_admin?).to be_true
+      end
+    end
+
+    context 'when there are some users' do
+      it 'returns false' do
+        create(:user, :admin)
+
+        expect(User.new.needs_to_be_admin?).to be_false
+      end
+    end
+  end
+
+  describe '#set_to_be_admin' do
+    it 'sets an admin role' do
+      user = User.new
+
+      user.set_to_be_admin
+
+      expect(user).to be_admin
+    end
+  end
 end

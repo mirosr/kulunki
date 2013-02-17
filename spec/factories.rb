@@ -13,6 +13,10 @@ FactoryGirl.define do
     password { generate(:secure_password) }
     password_confirmation { |u| u.password }
 
+    trait :admin do
+      role 'admin'
+    end
+
     factory :user_with_reset_password_token do
       reset_password_token { generate(:sorcery_random_token) }
       reset_password_token_expires_at { 1.week.from_now }

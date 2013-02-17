@@ -23,4 +23,16 @@ class User < ActiveRecord::Base
       false
     end
   end
+
+  def admin?
+    role == 'admin'
+  end
+
+  def needs_to_be_admin?
+    !admin? && new_record? && User.count == 0
+  end
+
+  def set_to_be_admin
+    self.role = 'admin' unless admin?
+  end
 end

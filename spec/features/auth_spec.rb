@@ -23,6 +23,8 @@ feature 'User sign up' do
   end
 
   scenario 'An user signs up to the system successfully' do
+    create(:user, :admin)
+
     visit_signup_path
 
     fill_in 'Username', with: 'john'
@@ -31,6 +33,7 @@ feature 'User sign up' do
     fill_in 'Confirm Password', with: 'john123'
 
     expect{ click_button 'Sign Up' }.to change{ User.count }.by 1
+    expect(User.find_by_username('john')).not_to be_admin
     expect(page).to have_text 'Welcome to Kulunki, john'
   end
 
@@ -40,6 +43,19 @@ feature 'User sign up' do
     expect{ click_button 'Sign Up' }.not_to change{ User.count }
     expect(page).not_to have_text 'Welcome to Kulunki'
     expect(page).to have_text 'The following errors prevent your user of being saved:'
+  end
+
+  scenario 'The fist created user is granted with an admin role' do
+    visit_signup_path
+
+    fill_in 'Username', with: 'john'
+    fill_in 'Email', with: 'john@example.com'
+    fill_in 'Password', with: 'john123'
+    fill_in 'Confirm Password', with: 'john123'
+    click_button 'Sign Up'
+
+    expect(User.find_by_username('john')).to be_admin
+    expect(page).to have_text 'You are the first user, so an admin role was granted to you'
   end
 end
 
