@@ -2,6 +2,8 @@
   %h1
     Kulunki » Please sign in to continue
 
+- if notice.present?
+  .notice= notice
 - if alert.present?
   .alert= alert
 

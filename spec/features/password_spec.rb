@@ -67,8 +67,10 @@ feature 'Password Reset' do
 end
 
 feature 'Password Change' do
+  include AuthHelper
+
   context 'When the given token is valid' do
-    scenario 'An user sees the password change form' do
+    scenario 'An user sees the change password form' do
       user = create(:user_with_reset_password_token)
 
       visit change_password_path(user.reset_password_token)
@@ -81,6 +83,39 @@ feature 'Password Change' do
         expect(page).to have_field 'New Password'
         expect(page).to have_field 'Confirm New Password'
         expect(page).to have_button 'Change Password'
+      end
+    end
+
+    scenario 'The user changes his password' do
+      user = create(:user_with_reset_password_token)
+
+      visit change_password_path(user.reset_password_token)
+
+      fill_in 'New Password', with: 'secure_password'
+      fill_in 'Confirm New Password', with: 'secure_password'
+      click_button 'Change Password'
+
+      expect(page).to have_text 'Your password has been changed'
+
+      fill_in 'Username or Email', with: user.username
+      fill_in 'Password', with: 'secure_password'
+      click_button 'Sign In'
+
+      expect(current_path).to eq(root_path)
+    end
+
+    context 'When password and confirm password do not match' do
+      scenario 'Showing change password form with an alert message' do
+        user = create(:user_with_reset_password_token)
+
+        visit change_password_path(user.reset_password_token)
+
+        fill_in 'New Password', with: 'secure_password'
+        fill_in 'Confirm New Password', with: 'password123'
+        click_button 'Change Password'
+
+        expect(current_path).to eq(change_password_path(user.reset_password_token))
+        expect(page).to have_text "Password doesn't match confirmation"
       end
     end
   end

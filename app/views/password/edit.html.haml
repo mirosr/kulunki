@@ -2,12 +2,17 @@
   %h1
     Kulunki » Please enter a new password
 
-- if notice.present?
-  .notice= notice
 - if alert.present?
   .alert= alert
 
-= form_tag change_password_path, id: :change_password do
+- if @user.errors.any?
+  .errors
+    %h2= "#{pluralize(@user.errors.count, 'error')} prohibited your password from being changed"
+    %ul
+      - @user.errors.full_messages.each do |msg|
+        %li= msg
+
+= form_tag change_password_path, id: :change_password, method: :put do
   = password_field_tag :password, nil, placeholder: 'New Password'
   = password_field_tag :password_confirmation, nil, placeholder: 'Confirm New Password'
   = submit_tag 'Change Password'
