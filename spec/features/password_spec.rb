@@ -25,122 +25,105 @@ feature 'Password Reset' do
     end
   end
 
-  context 'When the given email is valid and existing' do
-    scenario 'Sending reset password instructions to the user' do
-      user = create(:user, email: 'john@example.com')
+  scenario 'An user sees the change password form' do
+    user = create(:user_with_reset_password_token)
 
-      visit_reset_password_path
+    visit change_password_path(user.reset_password_token)
 
-      fill_in 'Email', with: 'john@example.com'
-      click_button 'Reset Password'
-
-      user.reload
-
-      expect(last_email).not_to be_nil
-      expect(last_email.to).to eq(['john@example.com'])
-      expect(last_email.body).to include(
-        change_password_url(user.reset_password_token))
-      expect(page).to have_text 'An email with instructions was sent to you'
+    within 'header.page' do
+      expect(page).to have_text 'Kulunki'
+      expect(page).to have_text 'Please enter a new password'
+    end
+    within 'form#change_password' do
+      expect(page).to have_field 'New Password'
+      expect(page).to have_field 'Confirm New Password'
+      expect(page).to have_button 'Change Password'
     end
   end
 
-  context 'When the given email is not valid' do
-    scenario 'Showing an alert message' do
-      visit_reset_password_path
+  scenario 'An user resets his password successfully' do
+    user = create(:user, email: 'john@example.com')
 
-      fill_in 'Email', with: 'invalid'
-      click_button 'Reset Password'
+    visit_reset_password_path
 
-      expect(page).to have_text 'The email address you provided was invalid. Please try again.'
-      expect(last_email).to be_nil
-    end
+    fill_in 'Email', with: 'john@example.com'
+    click_button 'Reset Password'
+
+    user.reload
+
+    expect(last_email).not_to be_nil
+    expect(last_email.to).to eq(['john@example.com'])
+    expect(last_email.body).to include(
+      change_password_url(user.reset_password_token))
+
+    expect(current_path).to eq(reset_password_path)
+    expect(page).to have_text 'An email with instructions was sent to you'
+
+    visit change_password_path(user.reset_password_token)
+
+    fill_in 'New Password', with: 'secure_password'
+    fill_in 'Confirm New Password', with: 'secure_password'
+    click_button 'Change Password'
+
+    expect(current_path).to eq(signin_path)
+    expect(page).to have_text 'Your password has been changed'
+
+    fill_in 'Username or Email', with: user.username
+    fill_in 'Password', with: 'secure_password'
+    click_button 'Sign In'
+
+    expect(current_path).to eq(root_path)
+  end
+
+  scenario 'Show an alert message when entered email is invalid' do
+    visit_reset_password_path
+
+    fill_in 'Email', with: 'invalid'
+    click_button 'Reset Password'
+
+    expect(current_path).to eq(reset_password_path)
+    expect(page).to have_text 'The email address you provided was invalid. Please try again.'
+    expect(last_email).to be_nil
   end
   
-  context 'When the given email is not existing' do
-    scenario 'Showing a fake email sent message' do
-      create(:user, email: 'john@example.com')
+  scenario 'Show a fake email sent message when entered email does not exist' do
+    create(:user, email: 'john@example.com')
 
-      visit_reset_password_path
+    visit_reset_password_path
 
-      fill_in 'Email', with: 'nonexisting@example.com'
-      click_button 'Reset Password'
+    fill_in 'Email', with: 'nonexisting@example.com'
+    click_button 'Reset Password'
 
-      expect(page).to have_text 'An email with instructions was sent to you'
-      expect(last_email).to be_nil
-    end
-  end
-end
-
-feature 'Password Change' do
-  include AuthHelper
-
-  context 'When the given token is valid' do
-    scenario 'An user sees the change password form' do
-      user = create(:user_with_reset_password_token)
-
-      visit change_password_path(user.reset_password_token)
-
-      within 'header.page' do
-        expect(page).to have_text 'Kulunki'
-        expect(page).to have_text 'Please enter a new password'
-      end
-      within 'form#change_password' do
-        expect(page).to have_field 'New Password'
-        expect(page).to have_field 'Confirm New Password'
-        expect(page).to have_button 'Change Password'
-      end
-    end
-
-    scenario 'The user changes his password' do
-      user = create(:user_with_reset_password_token)
-
-      visit change_password_path(user.reset_password_token)
-
-      fill_in 'New Password', with: 'secure_password'
-      fill_in 'Confirm New Password', with: 'secure_password'
-      click_button 'Change Password'
-
-      expect(page).to have_text 'Your password has been changed'
-
-      fill_in 'Username or Email', with: user.username
-      fill_in 'Password', with: 'secure_password'
-      click_button 'Sign In'
-
-      expect(current_path).to eq(root_path)
-    end
-
-    context 'When password and confirm password do not match' do
-      scenario 'Showing change password form with an alert message' do
-        user = create(:user_with_reset_password_token)
-
-        visit change_password_path(user.reset_password_token)
-
-        fill_in 'New Password', with: 'secure_password'
-        fill_in 'Confirm New Password', with: 'password123'
-        click_button 'Change Password'
-
-        expect(current_path).to eq(change_password_path(user.reset_password_token))
-        expect(page).to have_text "Password doesn't match confirmation"
-      end
-    end
+    expect(current_path).to eq(reset_password_path)
+    expect(page).to have_text 'An email with instructions was sent to you'
+    expect(last_email).to be_nil
   end
 
-  context 'When the given token is not valid' do
-    scenario 'Showing the sign in form' do
-      visit change_password_path('invalid_token')
+  scenario 'Show the sign in form when entered token is invalid' do
+    visit change_password_path('invalid_token')
 
-      expect(current_path).to eq(signin_path)
-    end
+    expect(current_path).to eq(signin_path)
   end
 
-  context 'When the given token has expired' do
-    scenario 'Showing reset password form with an alert message' do
-      user = create(:user_with_expired_reset_password_token)
+  scenario 'Show an alert message when entered token has expired' do
+    user = create(:user_with_expired_reset_password_token)
 
-      visit change_password_path(user.reset_password_token)
+    visit change_password_path(user.reset_password_token)
 
-      expect(current_path).to eq(reset_password_path)
-      expect(page).to have_text 'Sorry, this reset password token has expited. Please request a new one.'
-    end
+    expect(current_path).to eq(reset_password_path)
+    expect(page).to have_text 'Sorry, this reset password token has expited. Please request a new one.'
+  end
+
+  scenario 'Show an alert message when entered passwords do not match' do
+    user = create(:user_with_reset_password_token)
+
+    visit change_password_path(user.reset_password_token)
+
+    fill_in 'New Password', with: 'secure_password'
+    fill_in 'Confirm New Password', with: 'password123'
+    click_button 'Change Password'
+
+    expect(current_path).to eq(change_password_path(user.reset_password_token))
+    expect(page).to have_text "Password doesn't match confirmation"
   end
 end
