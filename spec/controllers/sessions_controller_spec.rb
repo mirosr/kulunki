@@ -17,15 +17,15 @@ describe SessionsController do
 
   describe 'POST #create' do
     it 'checks the user credentials' do
-      @controller.should_receive(:login).once.with('john', 'john123', nil)
-      @controller.should_receive(:logged_in?).once
+      controller.should_receive(:login).once.with('john', 'john123', nil)
+      controller.should_receive(:logged_in?).once
 
       post :create, username: 'john', password: 'john123'
     end
 
     context 'when user credentials are valid' do
       before(:each) do
-        @controller.stub(:logged_in?){ true }
+        controller.stub(:logged_in?){ true }
 
         post :create
       end
@@ -41,7 +41,7 @@ describe SessionsController do
 
     context 'when user credentials are not valid' do
       before(:each) do
-        @controller.stub(:logged_in?){ false }
+        controller.stub(:logged_in?){ false }
 
         post :create
       end
@@ -57,10 +57,10 @@ describe SessionsController do
 
     context 'when the user selects remember me' do
       it 'checks the user credentials' do
-        @controller.stub(:logged_in?){ true }
+        controller.stub(:logged_in?){ true }
 
-        @controller.should_receive(:login).once.with('john', 'john123', '1')
-        @controller.should_receive(:logged_in?).once
+        controller.should_receive(:login).once.with('john', 'john123', '1')
+        controller.should_receive(:logged_in?).once
 
         post :create, username: 'john', password: 'john123', remember_me: '1'
       end
@@ -77,7 +77,7 @@ describe SessionsController do
 
   describe 'GET #destroy' do
     it 'destroys the user session' do
-      @controller.should_receive(:logout)
+      controller.should_receive(:logout)
 
       get :destroy
 
