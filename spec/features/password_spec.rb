@@ -7,8 +7,13 @@ feature 'Password Reset' do
     clear_email_queue
   end
 
+  def visit_reset_password_path
+    visit signin_path
+    click_link 'Forgot password?'
+  end
+
   scenario 'An user sees the password reset form' do
-    visit reset_password_path
+    visit_reset_password_path
 
     within 'header.page' do
       expect(page).to have_text 'Kulunki'
@@ -24,7 +29,7 @@ feature 'Password Reset' do
     scenario 'Sending reset password instructions to the user' do
       user = create(:user, email: 'john@example.com')
 
-      visit reset_password_path
+      visit_reset_password_path
 
       fill_in 'Email', with: 'john@example.com'
       click_button 'Reset Password'
@@ -41,7 +46,7 @@ feature 'Password Reset' do
 
   context 'When the given email is not valid' do
     scenario 'Showing an alert message' do
-      visit reset_password_path
+      visit_reset_password_path
 
       fill_in 'Email', with: 'invalid'
       click_button 'Reset Password'
@@ -55,7 +60,7 @@ feature 'Password Reset' do
     scenario 'Showing a fake email sent message' do
       create(:user, email: 'john@example.com')
 
-      visit reset_password_path
+      visit_reset_password_path
 
       fill_in 'Email', with: 'nonexisting@example.com'
       click_button 'Reset Password'
