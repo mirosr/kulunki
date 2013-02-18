@@ -3,13 +3,13 @@ require 'spec_helper'
 feature 'Page Header' do
   include AuthHelper
 
-  scenario 'Showing the username' do
+  scenario 'Show the link to user profile' do
     visit_protected_as root_path, username: 'john'
 
-    expect(page).to have_text 'john'
+    expect(page).to have_link 'john', href: profile_path
   end
 
-  scenario 'Showing the signout link' do
+  scenario 'Show the signout link' do
     visit_protected root_path
 
     expect(page).to have_link('Sign Out', href: signout_path)
