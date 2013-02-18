@@ -24,6 +24,17 @@ module AuthHelper
     click_button 'Sign In'
   end
 
+  def visit_protected_as_user(path, user)
+    password = user.password
+    user.save!
+    
+    visit path
+
+    fill_in 'Username or Email', with: user.username
+    fill_in 'Password', with: password
+    click_button 'Sign In'
+  end
+
   shared_examples 'a protected page' do |path_as_sym|
     let(:path) { send(path_as_sym) }
 

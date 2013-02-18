@@ -1,2 +1,9 @@
-%h1 Profile#show
-%p Find me in app/views/profile/show.html.haml
+- content_for :content_title do
+  %header.content
+    %h1 Your Profile
+
+%p= "Email: #{current_user.email}"
+%p= "Username: #{current_user.username}"
+%p= "Name: #{current_user.full_name}"
+%p= 'Household: none'
+%p= 'Co-members: none'
