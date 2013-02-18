@@ -16,6 +16,9 @@ Kulunki::Application.routes.draw do
   # Users
   resources :users
 
+  # Profile
+  get 'profile' => 'profile#show'
+
   # Dashboard
   get 'dashboard' => 'dashboard#show'
 end
