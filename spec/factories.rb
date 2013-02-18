@@ -12,6 +12,7 @@ FactoryGirl.define do
     email { Forgery(:email).address }
     password { generate(:secure_password) }
     password_confirmation { |u| u.password }
+    full_name { Forgery(:name).full_name }
 
     trait :admin do
       role 'admin'
