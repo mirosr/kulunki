@@ -23,4 +23,7 @@ Kulunki::Application.routes.draw do
 
   # Dashboard
   get 'dashboard' => 'dashboard#show'
+
+  # Households
+  resources :households, only: [:new, :create]
 end
