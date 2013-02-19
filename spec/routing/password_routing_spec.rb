@@ -16,7 +16,7 @@ describe 'Password routes' do
       controller: 'password', action: 'edit', token: 'token_value')
   end
 
-  it 'routes to /password/change with post method' do
+  it 'routes to /password/change with put method' do
     expect(put: '/password/change/token_value').to route_to(
       controller: 'password', action: 'update', token: 'token_value')
   end
