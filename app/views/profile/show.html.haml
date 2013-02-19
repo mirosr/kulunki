@@ -2,8 +2,13 @@
   %header.content
     %h1 Your Profile
 
+- if notice.present?
+  .notice= notice
+
 %p= "Email: #{current_user.email}"
 %p= "Username: #{current_user.username}"
 %p= "Name: #{current_user.full_name}"
 %p= 'Household: none'
 %p= 'Co-members: none'
+
+= link_to 'Edit', edit_profile_path

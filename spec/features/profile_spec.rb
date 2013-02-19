@@ -18,6 +18,60 @@ feature 'User Profile' do
     expect(page).to have_text 'Name: John Doe'
     expect(page).to have_text 'Household: none'
     expect(page).to have_text 'Co-members: none'
+    expect(page).to have_link 'Edit', href: edit_profile_path
+  end
+
+  scenario 'An user sees the edit profile form' do
+    user = build(:user, username: 'john', full_name: 'John Doe')
+
+    visit_protected_as_user profile_path, user
+
+    click_link 'Edit'
+
+    within 'header.content' do
+      expect(page).to have_text 'Edit Your Profile'
+    end
+    within 'form#edit_profile' do
+      expect(page).to have_field 'Username', with: user.username
+      expect(page).to have_field 'Name', with: user.full_name
+      expect(page).to have_button 'Save'
+    end
+    expect(page).to have_link 'Back to Profile', href: profile_path
+  end
+
+  scenario 'An user edits his personal data successfully' do
+    user = build(:user, username: 'john', full_name: 'John Doe')
+
+    visit_protected_as_user profile_path, user
+
+    click_link 'Edit'
+
+    expect(current_path).to eq(edit_profile_path)
+
+    fill_in 'Username', with: 'jonathan'
+    fill_in 'Name', with: 'Jonathan Doe'
+    click_button 'Save'
+
+    expect(current_path).to eq(profile_path)
+    expect(page).to have_text 'Your personal data was updated successfully'
+    expect(page).to have_text 'jonathan'
+    expect(page).to have_text 'Jonathan Doe'
+  end
+
+  scenario 'Show an alert message after failed update' do
+    user = build(:user, username: 'john', full_name: 'John Doe')
+
+    visit_protected_as_user profile_path, user
+
+    click_link 'Edit'
+
+    fill_in 'Username', with: ''
+    fill_in 'Name', with: 'Jonathan Doe'
+    click_button 'Save'
+
+    expect(current_path).to eq(edit_profile_path)
+    expect(page).to have_text 'Your personal data failed to update'
+    expect(page).to have_text 'john'
+    expect(page).not_to have_text 'Jonathan Doe'
   end
 end
-

@@ -1,0 +1,16 @@
+- content_for :content_title do
+  %header.content
+    %h1 Edit Your Profile
+
+- if alert.present?
+  .alert= alert
+
+= form_for @profile, url: edit_profile_path, method: :put,
+  html: {id: :edit_profile, class: :edit_profile} do |f|
+  = f.label :username
+  = f.text_field :username
+  = f.label :full_name, 'Name'
+  = f.text_field :full_name
+  = f.submit 'Save'
+
+= link_to 'Back to Profile', profile_path

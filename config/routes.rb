@@ -18,6 +18,8 @@ Kulunki::Application.routes.draw do
 
   # Profile
   get 'profile' => 'profile#show'
+  get 'profile/edit' => 'profile#edit', as: :edit_profile
+  put 'profile/edit' => 'profile#update', as: :edit_profile
 
   # Dashboard
   get 'dashboard' => 'dashboard#show'
