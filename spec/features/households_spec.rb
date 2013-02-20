@@ -32,6 +32,7 @@ feature 'Households' do
     expect(current_path).to eq(profile_path)
     expect(page).to have_text('Your household was created successfully')
     expect(page).to have_text('My household')
+    expect(page).not_to have_text 'Create New Household'
   end
 
   scenario 'Show an alert message after failed create' do
