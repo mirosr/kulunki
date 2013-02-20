@@ -30,4 +30,8 @@ FactoryGirl.define do
       reset_password_email_sent_at { 2.weeks.ago }
     end
   end
+
+  factory :household do
+    name { Forgery(:basic).text }
+  end
 end

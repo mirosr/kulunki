@@ -8,7 +8,12 @@
 %p= "Email: #{current_user.email}"
 %p= "Username: #{current_user.username}"
 %p= "Name: #{current_user.full_name}"
-%p= 'Household: none'
+%p
+  - if @household.present?
+    = "Household: #{@household.name}"
+  - else
+    = 'Household: none'
+  = link_to 'Create New Household', new_household_path
 %p= 'Co-members: none'
 
 = link_to 'Edit', edit_profile_path

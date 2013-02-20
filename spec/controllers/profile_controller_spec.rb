@@ -10,6 +10,16 @@ describe ProfileController do
       end
     end
 
+    it 'initializes a household variable' do
+      Household.stub(:first){ Household.new }
+
+      login_user build_stubbed(:user)
+
+      get :show
+
+      expect(assigns(:household)).to be_a(Household)
+    end
+    
     it 'renders the :show template' do
       login_user build_stubbed(:user)
 

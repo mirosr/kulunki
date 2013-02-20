@@ -17,6 +17,7 @@ feature 'User Profile' do
     expect(page).to have_text 'Username: john'
     expect(page).to have_text 'Name: John Doe'
     expect(page).to have_text 'Household: none'
+    expect(page).to have_link 'Create New Household'
     expect(page).to have_text 'Co-members: none'
     expect(page).to have_link 'Edit', href: edit_profile_path
   end

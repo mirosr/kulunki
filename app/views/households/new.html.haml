@@ -1,2 +1,11 @@
-%h1 Households#new
-%p Find me in app/views/households/new.html.haml
+- content_for :content_title do
+  %header.content
+    %h1 Create New Household
+
+- if alert.present?
+  .alert= alert
+
+= form_for @household do |f|
+  = f.label :name
+  = f.text_field :name
+  = f.button 'Save'
