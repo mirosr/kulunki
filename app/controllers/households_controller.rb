@@ -5,6 +5,7 @@ class HouseholdsController < ApplicationController
 
   def create
     @household = Household.new(params[:household])
+    @household.head = current_user
     if @household.save
       redirect_to profile_path, notice: 'Your household was created successfully'
     else

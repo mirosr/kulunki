@@ -10,7 +10,19 @@ describe Household do
   end
 
   describe 'validations' do
-    it { should validate_presence_of(:name) }
-    it { should validate_uniqueness_of(:name) }
+    context 'name' do
+      it { should validate_presence_of(:name) }
+
+      it 'should be unique' do
+        create(:household, name: 'my household')
+        expect(build(:household, name: 'my household')).not_to be_valid
+      end
+    end
+
+    it { should validate_presence_of(:head) }
+  end
+
+  describe 'associations' do
+    it { should belong_to(:head) }
   end
 end

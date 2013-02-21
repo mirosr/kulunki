@@ -33,5 +33,7 @@ FactoryGirl.define do
 
   factory :household do
     name { Forgery(:basic).text }
+
+    association :head, factory: :user, strategy: :build
   end
 end

@@ -35,10 +35,12 @@ describe HouseholdsController do
 
   describe 'POST #create' do
     before (:each) do
-      login_user build_stubbed(:user)
+      @user = build_stubbed(:user)
+      login_user @user
 
       @household = Household.new
       Household.should_receive(:new).once.with(instance_of(HashWithIndifferentAccess)){ @household }
+      @household.should_receive(:head=).once.with(@user)
     end
     
     context 'when form params are valid' do
