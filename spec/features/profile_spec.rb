@@ -6,7 +6,7 @@ feature 'User Profile' do
   it_behaves_like 'a protected page', :profile_path
 
   scenario 'Show the user profile' do
-    user = build(:user, username: 'john',
+    user = create(:user, username: 'john',
       email: 'john@example.com', full_name: 'John Doe')
 
     visit_protected_as_user profile_path, user
@@ -23,7 +23,7 @@ feature 'User Profile' do
   end
 
   scenario 'An user sees the edit profile form' do
-    user = build(:user, username: 'john', full_name: 'John Doe')
+    user = create(:user, username: 'john', full_name: 'John Doe')
 
     visit_protected_as_user profile_path, user
 
@@ -41,7 +41,7 @@ feature 'User Profile' do
   end
 
   scenario 'An user edits his personal data successfully' do
-    user = build(:user, username: 'john', full_name: 'John Doe')
+    user = create(:user, username: 'john', full_name: 'John Doe')
 
     visit_protected_as_user profile_path, user
 
@@ -60,7 +60,7 @@ feature 'User Profile' do
   end
 
   scenario 'Show an alert message after failed update' do
-    user = build(:user, username: 'john', full_name: 'John Doe')
+    user = create(:user, username: 'john', full_name: 'John Doe')
 
     visit_protected_as_user profile_path, user
 
@@ -83,7 +83,7 @@ feature 'User Profile' do
       create(:user, username: username, household: user.household)
     end
 
-    visit_protected_as_user_ex profile_path, user
+    visit_protected_as_user profile_path, user
 
     expect(page).to have_text "Co-members: #{co_members.join(', ')}"
   end

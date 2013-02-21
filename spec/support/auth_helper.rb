@@ -25,17 +25,6 @@ module AuthHelper
   end
 
   def visit_protected_as_user(path, user)
-    password = user.password
-    user.save!
-    
-    visit path
-
-    fill_in 'Username or Email', with: user.username
-    fill_in 'Password', with: password
-    click_button 'Sign In'
-  end
-
-  def visit_protected_as_user_ex(path, user)
     password = gen_new_user_pass(user)
     
     visit path
