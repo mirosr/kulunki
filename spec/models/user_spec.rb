@@ -41,6 +41,23 @@ describe User do
     end
   end
 
+  describe 'associations' do
+    it { should belong_to(:household) }
+
+    describe 'co-members' do
+      it { should have_many(:co_members) }
+
+      it 'returns all household members without self' do
+        members = create(:household_with_members).members
+        co_members = members.first.co_members
+
+        expect(co_members.count).to eq(members.count - 1)
+        members.shift
+        expect(co_members).to eq(members)
+      end
+    end
+  end
+
   describe '.valid_email?' do
     context 'when input param matches the regexp' do
       it 'returns true' do

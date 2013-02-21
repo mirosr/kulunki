@@ -24,5 +24,6 @@ describe Household do
 
   describe 'associations' do
     it { should belong_to(:head) }
+    it { should have_many(:members) }
   end
 end

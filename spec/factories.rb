@@ -29,11 +29,29 @@ FactoryGirl.define do
       reset_password_token_expires_at { 1.week.ago }
       reset_password_email_sent_at { 2.weeks.ago }
     end
+
+    factory :user_head_of_household do
+      association :household, factory: :household, strategy: :build
+
+      after(:build) do |user|
+        user.household.head = user
+      end
+    end
   end
 
   factory :household do
     name { Forgery(:basic).text }
 
     association :head, factory: :user, strategy: :build
+
+    factory :household_with_members do
+      ignore do
+        members_count 5
+      end
+
+      after(:create) do |household, evaluator|
+        create_list(:user, evaluator.members_count, household: household)
+      end
+    end
   end
 end

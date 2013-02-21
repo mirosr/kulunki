@@ -6,4 +6,6 @@ class Household < ActiveRecord::Base
 
   belongs_to :head, class_name: 'User',
     foreign_key: 'head_id'
+
+  has_many :members, class_name: 'User'
 end

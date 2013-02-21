@@ -12,6 +12,11 @@ class User < ActiveRecord::Base
   validates :password, confirmation: true, length: { minimum: 6 },
     if: :password
 
+  belongs_to :household
+
+  has_many :co_members, through: :household, source: :members,
+    conditions: proc { %Q["users"."id" != #{self.id}] }
+
   def self.valid_email?(value)
     !!(value =~ /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)
   end

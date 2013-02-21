@@ -6,8 +6,8 @@ feature 'User Profile' do
   it_behaves_like 'a protected page', :profile_path
 
   scenario 'Show the user profile' do
-    user = build(:user, username: 'john', email: 'john@example.com',
-      full_name: 'John Doe')
+    user = build(:user, username: 'john',
+      email: 'john@example.com', full_name: 'John Doe')
 
     visit_protected_as_user profile_path, user
 
@@ -74,5 +74,17 @@ feature 'User Profile' do
     expect(page).to have_text 'Your personal data failed to update'
     expect(page).to have_text 'john'
     expect(page).not_to have_text 'Jonathan Doe'
+  end
+
+  scenario 'An user sees other household members' do
+    user = create(:user_head_of_household, username: 'john')
+    co_members = %w{bob deb ed joe kim}
+    co_members.each do |username|
+      create(:user, username: username, household: user.household)
+    end
+
+    visit_protected_as_user_ex profile_path, user
+
+    expect(page).to have_text "Co-members: #{co_members.join(', ')}"
   end
 end
