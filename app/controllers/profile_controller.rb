@@ -1,6 +1,5 @@
 class ProfileController < ApplicationController
   def show
-    @household = Household.first
   end
 
   def edit

@@ -36,6 +36,8 @@ describe HouseholdsController do
   describe 'POST #create' do
     before (:each) do
       @user = build_stubbed(:user)
+      @user.stub(:reload) { true }
+      @user.stub(:save) { true }
       login_user @user
 
       @household = Household.new
