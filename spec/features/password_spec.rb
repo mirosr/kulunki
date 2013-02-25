@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 feature 'Password Reset' do
+  include AuthHelper
   include EmailHelper
 
   background do
@@ -72,10 +73,7 @@ feature 'Password Reset' do
     expect(current_path).to eq(signin_path)
     expect(page).to have_text 'Your password has been changed'
 
-    
-    fill_in 'Username or Email', with: user.username
-    fill_in 'Password', with: 'secure_password'
-    click_button 'Sign In'
+    fill_in_signin_form(user.username, 'secure_password')
 
     expect(current_path).to eq(root_path)
   end
