@@ -6,10 +6,8 @@ feature 'User Profile' do
   it_behaves_like 'a protected page', :profile_path
 
   scenario 'Show the user profile' do
-    user = create(:user, username: 'john',
-      email: 'john@example.com', full_name: 'John Doe')
-
-    visit_protected_as_user profile_path, user
+    visit_protected_as profile_path, username: 'john',
+      email: 'john@example.com', full_name: 'John Doe'
 
     expect(current_path).to eq(profile_path)
     expect(page).to have_text 'Your Profile'
@@ -41,9 +39,8 @@ feature 'User Profile' do
   end
 
   scenario 'An user edits his personal data successfully' do
-    user = create(:user, username: 'john', full_name: 'John Doe')
-
-    visit_protected_as_user profile_path, user
+    visit_protected_as profile_path, username: 'john',
+      full_name: 'John Doe'
 
     click_link 'Edit'
 
@@ -60,9 +57,8 @@ feature 'User Profile' do
   end
 
   scenario 'Show an alert message after failed update' do
-    user = create(:user, username: 'john', full_name: 'John Doe')
-
-    visit_protected_as_user profile_path, user
+    visit_protected_as profile_path, username: 'john',
+      full_name: 'John Doe'
 
     click_link 'Edit'
 
