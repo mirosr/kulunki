@@ -12,6 +12,12 @@ feature 'Password Reset' do
     click_link 'Forgot password?'
   end
 
+  def fill_in_reset_password_form(password, confirm_password)
+    fill_in 'New Password', with: password
+    fill_in 'Confirm New Password', with: confirm_password
+    click_button 'Change Password'
+  end
+
   scenario 'An user sees the password reset form' do
     visit_reset_password_path
 
@@ -61,13 +67,12 @@ feature 'Password Reset' do
 
     visit change_password_path(user.reset_password_token)
 
-    fill_in 'New Password', with: 'secure_password'
-    fill_in 'Confirm New Password', with: 'secure_password'
-    click_button 'Change Password'
+    fill_in_reset_password_form('secure_password', 'secure_password')
 
     expect(current_path).to eq(signin_path)
     expect(page).to have_text 'Your password has been changed'
 
+    
     fill_in 'Username or Email', with: user.username
     fill_in 'Password', with: 'secure_password'
     click_button 'Sign In'
@@ -119,9 +124,7 @@ feature 'Password Reset' do
 
     visit change_password_path(user.reset_password_token)
 
-    fill_in 'New Password', with: 'secure_password'
-    fill_in 'Confirm New Password', with: 'password123'
-    click_button 'Change Password'
+    fill_in_reset_password_form('secure_password', 'password123')
 
     expect(current_path).to eq(change_password_path(user.reset_password_token))
     expect(page).to have_text "Password doesn't match confirmation"
