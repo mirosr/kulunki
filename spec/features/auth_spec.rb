@@ -60,6 +60,12 @@ feature 'User sign up' do
 end
 
 feature 'User sign in' do
+  def fill_in_signin_form(username, password)
+    fill_in 'Username or Email', with: username
+    fill_in 'Password', with: password
+    click_button 'Sign In'
+  end
+
   scenario 'An user sees the sign in form' do
     visit signin_path
 
@@ -82,9 +88,7 @@ feature 'User sign in' do
 
     visit signin_path
 
-    fill_in 'Username or Email', with: 'john'
-    fill_in 'Password', with: 'john123'
-    click_button 'Sign In'
+    fill_in_signin_form('john', 'john123')
 
     expect(current_path).to eq(dashboard_path)
     expect(page).to have_text 'Signed in successfully'
@@ -95,9 +99,7 @@ feature 'User sign in' do
 
     visit signin_path
 
-    fill_in 'Username or Email', with: 'john@example.com'
-    fill_in 'Password', with: 'john123'
-    click_button 'Sign In'
+    fill_in_signin_form('john@example.com', 'john123')
 
     expect(current_path).to eq(dashboard_path)
     expect(page).to have_text 'Signed in successfully'
