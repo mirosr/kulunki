@@ -60,11 +60,7 @@ feature 'User sign up' do
 end
 
 feature 'User sign in' do
-  def fill_in_signin_form(username, password)
-    fill_in 'Username or Email', with: username
-    fill_in 'Password', with: password
-    click_button 'Sign In'
-  end
+  include AuthHelper
 
   scenario 'An user sees the sign in form' do
     visit signin_path
