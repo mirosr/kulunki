@@ -1,6 +1,13 @@
 module AuthHelper
+  def fill_in_signin_form(username, password)
+    fill_in 'Username or Email', with: username
+    fill_in 'Password', with: password
+    click_button 'Sign In'
+  end
+
   def visit_protected(path)
-    user = create(:user, password: gen_secure_pass)
+    password = gen_secure_pass
+    user = create(:user, password: password)
     
     visit_protected_path(path, user.username, password)
   end
@@ -34,6 +41,12 @@ module AuthHelper
 
   private
   
+  def visit_protected_path(path, username, password)
+    visit path
+
+    fill_in_signin_form(username, password)
+  end
+
   def gen_secure_pass
     FactoryGirl.generate(:secure_password)
   end
@@ -43,13 +56,5 @@ module AuthHelper
     user.update_attributes!(password: password,
       password_confirmation: password)
     password
-  end
-
-  def visit_protected_path(path, username, password)
-    visit path
-
-    fill_in 'Username or Email', with: username
-    fill_in 'Password', with: password
-    click_button 'Sign In'
   end
 end
