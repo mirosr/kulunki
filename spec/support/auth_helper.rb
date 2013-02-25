@@ -1,13 +1,8 @@
 module AuthHelper
   def visit_protected(path)
-    password = gen_secure_pass
-    user = create(:user, password: password)
+    user = create(:user, password: gen_secure_pass)
     
-    visit path
-
-    fill_in 'Username or Email', with: user.username
-    fill_in 'Password', with: password
-    click_button 'Sign In'
+    visit_protected_path(path, user.username, password)
   end
 
   def visit_protected_as(path, create_params)
@@ -17,21 +12,11 @@ module AuthHelper
     password = create_params[:password]
     user = create(:user, create_params)
     
-    visit path
-
-    fill_in 'Username or Email', with: user.username
-    fill_in 'Password', with: password
-    click_button 'Sign In'
+    visit_protected_path(path, user.username, password)
   end
 
   def visit_protected_as_user(path, user)
-    password = gen_new_user_pass(user)
-    
-    visit path
-
-    fill_in 'Username or Email', with: user.username
-    fill_in 'Password', with: password
-    click_button 'Sign In'
+    visit_protected_path(path, user.username, gen_new_user_pass(user))
   end
 
   shared_examples 'a protected page' do |path_as_sym|
@@ -58,5 +43,13 @@ module AuthHelper
     user.update_attributes!(password: password,
       password_confirmation: password)
     password
+  end
+
+  def visit_protected_path(path, username, password)
+    visit path
+
+    fill_in 'Username or Email', with: username
+    fill_in 'Password', with: password
+    click_button 'Sign In'
   end
 end
