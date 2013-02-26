@@ -19,7 +19,7 @@ gem 'jquery-rails'
 gem 'haml-rails', '~> 0.4.0'
 
 group :development do
-  gem 'pry', '~> 0.9.11'
+  gem 'pry', '~> 0.9.12'
 end
 
 group :development, :test do
