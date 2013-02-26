@@ -11,7 +11,7 @@ gem 'pg'
 group :assets do
   gem 'sass-rails',   '~> 3.2.6'
   gem 'coffee-rails', '~> 3.2.2'
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier', '~> 1.3.0'
 end
 
 gem 'jquery-rails'
@@ -23,19 +23,19 @@ group :development do
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 2.12.2'
+  gem 'rspec-rails', '~> 2.13.0'
 end
 
 group :test do
-  gem 'rb-inotify', '~> 0.8.8'
-  gem 'guard-rspec', '~> 2.4.0'
-  gem 'guard-spork', '~> 1.4.1'
-  gem 'factory_girl_rails', '~> 4.2.0'
+  gem 'rb-inotify', '~> 0.9.0'
+  gem 'guard-rspec', '~> 2.4.1'
+  gem 'guard-spork', '~> 1.4.2'
+  gem 'factory_girl_rails', '~> 4.2.1'
   gem 'shoulda-matchers', '~> 1.4.2'
   gem 'forgery', '~> 0.5.0'
   gem 'capybara', '~> 2.0.2'
   gem 'database_cleaner', '~> 0.9.1'
-  gem 'launchy', '~> 2.1.2'
+  gem 'launchy', '~> 2.2.0'
 
   if ENV['TRAVIS']
     if ENV['DB'] == 'mysql'
