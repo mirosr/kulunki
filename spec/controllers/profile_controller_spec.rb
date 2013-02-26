@@ -52,13 +52,13 @@ describe ProfileController do
     context 'when form params are valid' do
       let(:current_user) { current_user = build_stubbed(:user) }
       before(:each) do
-        current_user.stub(:update_attributes) { true }
+        current_user.stub(:update_personal_attributes) { true }
         login_user current_user
       end
 
       it 'updates the user' do
         current_user.should_receive(
-          :update_attributes).with(
+          :update_personal_attributes).with(
           'username' => 'john', 'full_name' => 'John Doe').once
 
         put :update, user: {username: 'john', full_name: 'John Doe'}
@@ -80,11 +80,99 @@ describe ProfileController do
     context 'when form params are invalid' do
       let(:current_user) { build_stubbed(:user) }
       before(:each) do
-        current_user.stub(:update_attributes) { false }
+        current_user.stub(:update_personal_attributes) { false }
         current_user.stub(:reload) { true }
         login_user current_user
 
         put :update, user: {username: ''}
+      end
+
+      it 'initializes the profile of current_user' do
+        expect(assigns(:profile)).to eq(current_user)
+      end
+
+      it 're-renders the :edit template' do
+        expect(response).to be_success
+        expect(response).to render_template :edit
+      end
+
+      it 'sets an alert message' do
+        expect(flash[:alert]).not_to be_blank
+      end
+    end
+  end
+
+  describe 'PUT #change_password' do
+    context 'when form params are valid' do
+      it 'changes the user password' do
+        current_user = build_stubbed(:user,
+          username: 'john', password: 'old_password')
+        User.should_receive(:authenticate).with('john', 'old_password').once { current_user }
+        current_user.stub(:change_password!).with(
+          'new_password').once { true }
+        login_user current_user
+
+        put :change_password, current_password: 'old_password',
+          password: 'new_password',
+          password_confirmation: 'new_password'
+      end
+
+      it 'redirects to profile url' do
+        current_user = build_stubbed(:user)
+        User.should_receive(:authenticate) { current_user }
+        current_user.stub(:change_password!) { true }
+        login_user current_user
+
+        put :change_password
+
+        expect(response).to redirect_to profile_path
+      end
+
+      it 'sets a notice message' do
+        current_user = build_stubbed(:user)
+        User.should_receive(:authenticate) { current_user }
+        current_user.stub(:change_password!) { true }
+        login_user current_user
+
+        put :change_password
+
+        expect(flash[:notice]).not_to be_nil
+      end
+    end
+
+    context 'when the current password is invalid' do
+      let(:current_user) { build_stubbed(:user) }
+      before(:each) do
+        User.should_receive(:authenticate) { nil }
+        login_user current_user
+
+        put :change_password
+      end
+
+      it 'initializes the profile of current_user' do
+        expect(assigns(:profile)).to eq(current_user)
+      end
+
+      it 're-renders the :edit template' do
+        expect(response).to be_success
+        expect(response).to render_template :edit
+      end
+
+      it 'sets an alert message' do
+        expect(flash[:alert]).not_to be_blank
+      end
+    end
+
+    context 'when new passwords do not match' do
+      let(:current_user) { build_stubbed(:user) }
+      before(:each) do
+        User.should_receive(:authenticate) { current_user }
+        current_user.stub(:change_password!).with(
+          'new_password').once { false }
+        login_user current_user
+
+        put :change_password, password: 'new_password',
+          password_confirmation: 'new_password'
       end
 
       it 'initializes the profile of current_user' do

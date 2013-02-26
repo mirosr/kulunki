@@ -41,4 +41,8 @@ class User < ActiveRecord::Base
   def set_to_be_admin
     self.role = 'admin' unless admin?
   end
+
+  def update_personal_attributes(params)
+    update_attributes(params.slice(:username, :full_name))
+  end
 end

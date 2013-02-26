@@ -13,4 +13,14 @@
   = f.text_field :full_name
   = f.submit 'Save'
 
+= form_tag profile_change_password_path, method: :put,
+  id: :change_password, class: :change_password do |f|
+  = label_tag :current_password, 'Current Password'
+  = password_field_tag :current_password
+  = label_tag :password, 'New Password'
+  = password_field_tag :password
+  = label_tag :password_confirmation, 'Confirm New Password'
+  = password_field_tag :password_confirmation
+  = submit_tag 'Change Password'
+
 = link_to 'Back to Profile', profile_path

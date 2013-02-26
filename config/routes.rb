@@ -20,6 +20,8 @@ Kulunki::Application.routes.draw do
   get 'profile' => 'profile#show'
   get 'profile/edit' => 'profile#edit', as: :edit_profile
   put 'profile/edit' => 'profile#update', as: :edit_profile
+  put 'profile/password/change' => 'profile#change_password',
+    as: :profile_change_password
 
   # Dashboard
   get 'dashboard' => 'dashboard#show'

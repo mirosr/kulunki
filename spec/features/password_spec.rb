@@ -128,3 +128,78 @@ feature 'Password Reset' do
     expect(page).to have_text "Password doesn't match confirmation"
   end
 end
+
+feature 'Password Change' do
+  include AuthHelper
+
+  scenario 'An user sees the change password form' do
+    visit_protected profile_path
+
+    click_link 'Edit'
+
+    within 'header.content' do
+      expect(page).to have_text 'Edit Your Profile'
+    end
+    within 'form#change_password' do
+      expect(page).to have_field 'Current Password'
+      expect(page).to have_field 'New Password'
+      expect(page).to have_field 'Confirm New Password'
+      expect(page).to have_button 'Change Password'
+    end
+    expect(page).to have_link 'Back to Profile', href: profile_path
+  end
+
+  scenario 'An user changes his password successfully' do
+    visit_protected_as profile_path, username: 'john', password: 'john123'
+
+    click_link 'Edit'
+
+    expect(current_path).to eq(edit_profile_path)
+
+    fill_in 'Current Password', with: 'john123'
+    fill_in 'password', with: 'new1234'
+    fill_in 'password_confirmation', with: 'new1234'
+    click_button 'Change Password'
+
+    expect(current_path).to eq(profile_path)
+    expect(page).to have_text 'Your password was changed successfully'
+
+    visit signout_path
+
+    fill_in_signin_form('john', 'new1234')
+
+    expect(page).to have_text 'john'
+  end
+
+  scenario 'Show an alert message when current password is invalid' do
+    visit_protected_as profile_path, username: 'john', password: 'john123'
+
+    click_link 'Edit'
+
+    expect(current_path).to eq(edit_profile_path)
+
+    fill_in 'Current Password', with: 'wrong password'
+    fill_in 'password', with: 'new1234'
+    fill_in 'password_confirmation', with: 'new1234'
+    click_button 'Change Password'
+
+    expect(current_path).to eq(profile_change_password_path)
+    expect(page).to have_text 'Current password was incorrect'
+  end
+
+  scenario "Show an alert message when new passwords don't match" do
+    visit_protected_as profile_path, username: 'john', password: 'john123'
+
+    click_link 'Edit'
+
+    expect(current_path).to eq(edit_profile_path)
+
+    fill_in 'Current Password', with: 'john123'
+    fill_in 'password', with: 'new1234'
+    fill_in 'password_confirmation', with: 'new6789'
+    click_button 'Change Password'
+
+    expect(current_path).to eq(profile_change_password_path)
+    expect(page).to have_text "The new passwords didn't matched"
+  end
+end

@@ -155,4 +155,15 @@ describe User do
       expect(user).to be_admin
     end
   end
+
+  describe '#update_personal_attributes' do
+    it 'updates only username and full_name' do
+      user = build_stubbed(:user)
+      user.should_receive(:update_attributes).with(
+        username: 'john', full_name: 'John Doe').once
+
+      user.update_personal_attributes(attributes_for(
+        :user, username: 'john', full_name: 'John Doe'))
+    end
+  end
 end
