@@ -132,6 +132,14 @@ end
 feature 'Password Change' do
   include AuthHelper
 
+  def fill_in_change_password_form(current_password,
+    password, password_confirmation)
+    fill_in 'Current Password', with: current_password
+    fill_in 'password', with: password
+    fill_in 'password_confirmation', with: password_confirmation
+    click_button 'Change Password'
+  end
+  
   scenario 'An user sees the change password form' do
     visit_protected profile_path
 
@@ -156,10 +164,7 @@ feature 'Password Change' do
 
     expect(current_path).to eq(edit_profile_path)
 
-    fill_in 'Current Password', with: 'john123'
-    fill_in 'password', with: 'new1234'
-    fill_in 'password_confirmation', with: 'new1234'
-    click_button 'Change Password'
+    fill_in_change_password_form('john123', 'new1234', 'new1234')
 
     expect(current_path).to eq(profile_path)
     expect(page).to have_text 'Your password was changed successfully'
@@ -178,10 +183,7 @@ feature 'Password Change' do
 
     expect(current_path).to eq(edit_profile_path)
 
-    fill_in 'Current Password', with: 'wrong password'
-    fill_in 'password', with: 'new1234'
-    fill_in 'password_confirmation', with: 'new1234'
-    click_button 'Change Password'
+    fill_in_change_password_form('wrong password', 'new1234', 'new1234')
 
     expect(current_path).to eq(profile_change_password_path)
     expect(page).to have_text 'Current password was incorrect'
@@ -194,10 +196,7 @@ feature 'Password Change' do
 
     expect(current_path).to eq(edit_profile_path)
 
-    fill_in 'Current Password', with: 'john123'
-    fill_in 'password', with: 'new1234'
-    fill_in 'password_confirmation', with: 'new6789'
-    click_button 'Change Password'
+    fill_in_change_password_form('john123', 'new1234', 'new6789')
 
     expect(current_path).to eq(profile_change_password_path)
     expect(page).to have_text "The new passwords didn't matched"
