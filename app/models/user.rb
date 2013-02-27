@@ -45,4 +45,9 @@ class User < ActiveRecord::Base
   def update_personal_attributes(params)
     update_attributes(params.slice(:username, :full_name))
   end
+
+  def change_email(email)
+    self.email = email
+    save
+  end
 end

@@ -166,4 +166,14 @@ describe User do
         :user, username: 'john', full_name: 'John Doe'))
     end
   end
+
+  describe '#change_email' do
+    it 'updates only email attribute' do
+      user = build_stubbed(:user)
+      user.should_receive(:email=).with('john@example.com').once
+      user.should_receive(:save).once
+
+      user.change_email('john@example.com')
+    end
+  end
 end

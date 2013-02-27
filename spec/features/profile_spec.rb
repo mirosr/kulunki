@@ -104,4 +104,60 @@ feature 'Change email form profile' do
     end
     expect(page).to have_link 'Back to Profile', href: profile_path
   end
+
+  scenario 'An user changes his email successfully' do
+    visit_protected_as profile_path, email: 'john@example.com',
+      password: 'john123'
+
+    click_link 'Edit'
+
+    expect(current_path).to eq(edit_profile_path)
+
+    within('form#change_email') do
+      fill_in 'New Email', with: 'john.doe@example.com'
+      fill_in 'Password', with: 'john123'
+      click_button 'Change Email'
+    end
+
+    expect(current_path).to eq(profile_path)
+    expect(page).to have_text 'Your email was changed successfully'
+    expect(page).to have_text 'Email: john.doe@example.com'
+  end
+
+  scenario 'Show an alert message when new email is invalid' do
+    visit_protected_as profile_path, email: 'john@example.com',
+      password: 'john123'
+
+    click_link 'Edit'
+
+    expect(current_path).to eq(edit_profile_path)
+
+    within('form#change_email') do
+      fill_in 'New Email', with: 'john_wrong_email'
+      fill_in 'Password', with: 'john123'
+      click_button 'Change Email'
+    end
+
+    expect(current_path).to eq(profile_change_email_path)
+    expect(page).to have_text 'The new email was incorrect'
+    expect(page).not_to have_text 'Email: john_wrong_email'
+  end
+
+  scenario 'Show an alert message when password is invalid' do
+    visit_protected_as profile_path, email: 'john@example.com',
+      password: 'john123'
+
+    click_link 'Edit'
+
+    expect(current_path).to eq(edit_profile_path)
+
+    within('form#change_email') do
+      fill_in 'New Email', with: 'john@example.com'
+      fill_in 'Password', with: 'wrong password'
+      click_button 'Change Email'
+    end
+
+    expect(current_path).to eq(profile_change_email_path)
+    expect(page).to have_text 'Given password was incorrect'
+  end
 end

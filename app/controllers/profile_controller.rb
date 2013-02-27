@@ -33,4 +33,22 @@ class ProfileController < ApplicationController
       render :edit
     end
   end
+
+  def change_email
+    if User.authenticate(current_user.username, params[:password])
+      if current_user.change_email(params[:email])
+        redirect_to profile_path, notice: 'Your email was changed successfully'
+      else
+        current_user.reload
+        @profile = current_user
+        flash.now.alert = 'The new email was incorrect'
+        render :edit
+      end
+    else
+      current_user.reload
+      @profile = current_user
+      flash.now.alert = 'Given password was incorrect'
+      render :edit
+    end
+  end
 end
