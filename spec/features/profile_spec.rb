@@ -84,3 +84,24 @@ feature 'User Profile' do
     expect(page).to have_text "Co-members: #{co_members.join(', ')}"
   end
 end
+
+feature 'Change email form profile' do
+  include AuthHelper
+
+  scenario 'An user sees the change email form' do
+    visit_protected_as profile_path, email: 'john@example.com'
+
+    click_link 'Edit'
+
+    within 'header.content' do
+      expect(page).to have_text 'Edit Your Profile'
+    end
+    within 'form#change_email' do
+      expect(page).to have_text 'Current Email: john@example.com'
+      expect(page).to have_field 'New Email'
+      expect(page).to have_field 'Password'
+      expect(page).to have_button 'Change Email'
+    end
+    expect(page).to have_link 'Back to Profile', href: profile_path
+  end
+end
