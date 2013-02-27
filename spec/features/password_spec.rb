@@ -134,10 +134,12 @@ feature 'Password Change' do
 
   def fill_in_change_password_form(current_password,
     password, password_confirmation)
-    fill_in 'Current Password', with: current_password
-    fill_in 'password', with: password
-    fill_in 'password_confirmation', with: password_confirmation
-    click_button 'Change Password'
+    within('form#change_password') do
+      fill_in 'Current Password', with: current_password
+      fill_in 'password', with: password
+      fill_in 'password_confirmation', with: password_confirmation
+      click_button 'Change Password'
+    end
   end
   
   scenario 'An user sees the change password form' do
