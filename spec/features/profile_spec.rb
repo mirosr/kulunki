@@ -88,6 +88,14 @@ end
 feature 'Change email form profile' do
   include AuthHelper
 
+  def fill_in_change_email_form(email, password)
+    within('form#change_email') do
+      fill_in 'New Email', with: email
+      fill_in 'Password', with: password
+      click_button 'Change Email'
+    end
+  end
+
   scenario 'An user sees the change email form' do
     visit_protected_as profile_path, email: 'john@example.com'
 
@@ -113,11 +121,7 @@ feature 'Change email form profile' do
 
     expect(current_path).to eq(edit_profile_path)
 
-    within('form#change_email') do
-      fill_in 'New Email', with: 'john.doe@example.com'
-      fill_in 'Password', with: 'john123'
-      click_button 'Change Email'
-    end
+    fill_in_change_email_form('john.doe@example.com', 'john123')
 
     expect(current_path).to eq(profile_path)
     expect(page).to have_text 'Your email was changed successfully'
@@ -132,11 +136,7 @@ feature 'Change email form profile' do
 
     expect(current_path).to eq(edit_profile_path)
 
-    within('form#change_email') do
-      fill_in 'New Email', with: 'john_wrong_email'
-      fill_in 'Password', with: 'john123'
-      click_button 'Change Email'
-    end
+    fill_in_change_email_form('john_wrong_email', 'john123')
 
     expect(current_path).to eq(profile_change_email_path)
     expect(page).to have_text 'The new email was incorrect'
@@ -151,11 +151,7 @@ feature 'Change email form profile' do
 
     expect(current_path).to eq(edit_profile_path)
 
-    within('form#change_email') do
-      fill_in 'New Email', with: 'john@example.com'
-      fill_in 'Password', with: 'wrong password'
-      click_button 'Change Email'
-    end
+    fill_in_change_email_form('john@example.com', 'wrong password')
 
     expect(current_path).to eq(profile_change_email_path)
     expect(page).to have_text 'Given password was incorrect'
