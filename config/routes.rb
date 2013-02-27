@@ -22,6 +22,8 @@ Kulunki::Application.routes.draw do
   put 'profile/edit' => 'profile#update', as: :edit_profile
   put 'profile/password/change' => 'profile#change_password',
     as: :profile_change_password
+  put 'profile/email/change' => 'profile#change_email',
+    as: :profile_change_email
 
   # Dashboard
   get 'dashboard' => 'dashboard#show'
