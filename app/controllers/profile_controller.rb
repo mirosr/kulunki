@@ -3,7 +3,6 @@ class ProfileController < ApplicationController
   end
 
   def edit
-    @profile = current_user
   end
 
   def update
@@ -11,44 +10,46 @@ class ProfileController < ApplicationController
       redirect_to profile_path, notice: 'Your personal data was updated successfully'
     else
       current_user.reload
-      @profile = current_user
-      flash.now.alert = 'Your personal data failed to update'
-      render :edit
+      render_edit_with_alert('Your personal data failed to update')
     end
   end
 
   def change_password
-    if User.authenticate(current_user.username, params[:current_password])
+    ensure_valid_password(params[:current_password],
+      'Current password was incorrect') do
       current_user.password_confirmation = params[:password_confirmation]
       if current_user.change_password!(params[:password])
         redirect_to profile_path, notice: 'Your password was changed successfully'
       else
-        @profile = current_user
-        flash.now.alert = "The new passwords didn't matched"
-        render :edit
+        current_user.reload
+        render_edit_with_alert(%q{The new passwords didn't matched})
       end
-    else
-      @profile = current_user
-      flash.now.alert = 'Current password was incorrect'
-      render :edit
     end
   end
 
   def change_email
-    if User.authenticate(current_user.username, params[:password])
+    ensure_valid_password(params[:password], 'Given password was incorrect') do
       if current_user.change_email(params[:email])
         redirect_to profile_path, notice: 'Your email was changed successfully'
       else
         current_user.reload
-        @profile = current_user
-        flash.now.alert = 'The new email was incorrect'
-        render :edit
+        render_edit_with_alert('The new email was incorrect')
       end
+    end
+  end
+
+  private
+
+  def render_edit_with_alert(message)
+    flash.now.alert = message
+    render :edit
+  end
+
+  def ensure_valid_password(password, fail_message, &block)
+    if User.authenticate(current_user.username, password)
+      yield if block_given?
     else
-      current_user.reload
-      @profile = current_user
-      flash.now.alert = 'Given password was incorrect'
-      render :edit
+      render_edit_with_alert(fail_message)
     end
   end
 end

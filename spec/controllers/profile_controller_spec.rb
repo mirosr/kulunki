@@ -29,15 +29,6 @@ describe ProfileController do
       end
     end
 
-    it 'initializes the profile of current_user' do
-      current_user = build_stubbed(:user)
-      login_user current_user
-
-      get :edit
-
-      expect(assigns(:profile)).to eq(current_user)
-    end
-
     it 'renders the :edit template' do
       login_user build_stubbed(:user)
 
@@ -85,10 +76,6 @@ describe ProfileController do
         login_user current_user
 
         put :update, user: {username: ''}
-      end
-
-      it 'initializes the profile of current_user' do
-        expect(assigns(:profile)).to eq(current_user)
       end
 
       it 're-renders the :edit template' do
@@ -149,10 +136,6 @@ describe ProfileController do
         put :change_password
       end
 
-      it 'initializes the profile of current_user' do
-        expect(assigns(:profile)).to eq(current_user)
-      end
-
       it 're-renders the :edit template' do
         expect(response).to be_success
         expect(response).to render_template :edit
@@ -169,14 +152,11 @@ describe ProfileController do
         User.should_receive(:authenticate) { current_user }
         current_user.stub(:change_password!).with(
           'new_password').once { false }
+        current_user.should_receive(:reload)
         login_user current_user
 
         put :change_password, password: 'new_password',
           password_confirmation: 'new_password'
-      end
-
-      it 'initializes the profile of current_user' do
-        expect(assigns(:profile)).to eq(current_user)
       end
 
       it 're-renders the :edit template' do
@@ -236,10 +216,6 @@ describe ProfileController do
         put :change_email
       end
 
-      it 'initializes the profile of current_user' do
-        expect(assigns(:profile)).to eq(current_user)
-      end
-
       it 're-renders the :edit template' do
         expect(response).to be_success
         expect(response).to render_template :edit
@@ -254,14 +230,9 @@ describe ProfileController do
       let(:current_user) { build_stubbed(:user) }
       before(:each) do
         User.should_receive(:authenticate) { nil }
-        current_user.should_receive(:reload)
         login_user current_user
 
         put :change_email
-      end
-
-      it 'initializes the profile of current_user' do
-        expect(assigns(:profile)).to eq(current_user)
       end
 
       it 're-renders the :edit template' do
