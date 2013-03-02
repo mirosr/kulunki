@@ -7,4 +7,11 @@ class UserMailer < ActionMailer::Base
 
     mail to: user.email, subject: 'Reset Password'
   end
+
+  def change_email_address_email(user)
+    @user = user
+    @url = change_email_url(@user.change_email_token)
+
+    mail to: user.change_email_new_value, subject: 'Change Email Address'
+  end
 end
