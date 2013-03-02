@@ -85,7 +85,7 @@ feature 'User Profile' do
   end
 end
 
-feature 'Change email form profile' do
+feature 'Change email from profile' do
   include AuthHelper
 
   def fill_in_change_email_form(email, password)
