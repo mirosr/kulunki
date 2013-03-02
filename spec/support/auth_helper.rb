@@ -22,8 +22,9 @@ module AuthHelper
     visit_protected_path(path, user.username, password)
   end
 
-  def visit_protected_as_user(path, user)
-    visit_protected_path(path, user.username, gen_new_user_pass(user))
+  def visit_protected_as_user(path, user, password = nil)
+    password = gen_new_user_pass(user) if password.nil?
+    visit_protected_path(path, user.username, password)
   end
 
   shared_examples 'a protected page' do |path_as_sym|
