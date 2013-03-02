@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130221160828) do
+ActiveRecord::Schema.define(:version => 20130302162746) do
 
   create_table "households", :force => true do |t|
     t.string   "name",       :null => false
@@ -38,8 +38,12 @@ ActiveRecord::Schema.define(:version => 20130221160828) do
     t.string   "role",                            :default => "user"
     t.string   "full_name"
     t.integer  "household_id"
+    t.string   "change_email_token"
+    t.datetime "change_email_token_expires_at"
+    t.string   "change_email_new_value"
   end
 
+  add_index "users", ["change_email_token"], :name => "index_users_on_change_email_token", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["household_id"], :name => "index_users_on_household_id"
   add_index "users", ["remember_me_token"], :name => "index_users_on_remember_me_token"
