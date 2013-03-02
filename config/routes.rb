@@ -13,6 +13,9 @@ Kulunki::Application.routes.draw do
   get 'password/change/:token' => 'password#edit', as: :change_password
   put 'password/change/:token' => 'password#update', as: :change_password
 
+  # Email
+  put 'email/change/:token' => 'email#update', as: :change_email
+
   # Users
   resources :users
 
