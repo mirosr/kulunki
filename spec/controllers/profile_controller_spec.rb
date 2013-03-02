@@ -172,11 +172,12 @@ describe ProfileController do
 
   describe 'PUT #change_email' do
     context 'when form params are valid' do
-      it 'changes the user email' do
+      it 'sends the change email instructions' do
         current_user = build_stubbed(:user, username: 'john',
           password: 'john123')
         User.should_receive(:authenticate).with('john', 'john123').once { current_user }
-        current_user.stub(:change_email).with('john@example.com').once { true }
+        User.should_receive(:valid_email?).with('john@example.com').once { true }
+        current_user.stub(:deliver_change_email_instructions!).with('john@example.com').once { true }
         login_user current_user
 
         put :change_email, email: 'john@example.com', password: 'john123'
@@ -185,7 +186,8 @@ describe ProfileController do
       it 'redirects to profile url' do
         current_user = build_stubbed(:user)
         User.should_receive(:authenticate) { current_user }
-        current_user.stub(:change_email) { true }
+        User.should_receive(:valid_email?).once { true }
+        current_user.stub(:deliver_change_email_instructions!) { true }
         login_user current_user
 
         put :change_email
@@ -196,7 +198,8 @@ describe ProfileController do
       it 'sets a notice message' do
         current_user = build_stubbed(:user)
         User.should_receive(:authenticate) { current_user }
-        current_user.stub(:change_email) { true }
+        User.should_receive(:valid_email?).once { true }
+        current_user.stub(:deliver_change_email_instructions!) { true }
         login_user current_user
 
         put :change_email
@@ -209,8 +212,7 @@ describe ProfileController do
       let(:current_user) { build_stubbed(:user) }
       before(:each) do
         User.should_receive(:authenticate) { current_user }
-        current_user.stub(:change_email) { false }
-        current_user.should_receive(:reload)
+        current_user.stub(:deliver_change_email_instructions!) { false }
         login_user current_user
 
         put :change_email

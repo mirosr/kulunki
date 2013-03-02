@@ -29,11 +29,10 @@ class ProfileController < ApplicationController
 
   def change_email
     ensure_valid_password(params[:password], 'Given password was incorrect') do
-      if current_user.change_email(params[:email])
-        redirect_to profile_path, notice: 'Your email was changed successfully'
-      else
-        current_user.reload
-        render_edit_with_alert('The new email was incorrect')
+      ensure_valid_email(params[:email]) do
+        if current_user.deliver_change_email_instructions!(params[:email])
+          redirect_to profile_path, notice: 'Your email was changed successfully'
+        end
       end
     end
   end
@@ -50,6 +49,14 @@ class ProfileController < ApplicationController
       yield if block_given?
     else
       render_edit_with_alert(fail_message)
+    end
+  end
+
+  def ensure_valid_email(email)
+    if User.valid_email?(email)
+      yield if block_given?
+    else
+      render_edit_with_alert('The new email was incorrect')
     end
   end
 end
