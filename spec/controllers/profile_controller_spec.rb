@@ -184,7 +184,7 @@ describe ProfileController do
           'john@example.com').once { true }
         login_user current_user
 
-        put :change_email, email: 'john@example.com', password: 'john123'
+        put :change_email, new_email: 'john@example.com', password: 'john123'
       end
 
       it 'redirects to profile url' do
@@ -242,7 +242,7 @@ describe ProfileController do
           'john@example.com').once { false }
         login_user current_user
 
-        put :change_email, email: 'john@example.com'
+        put :change_email, new_email: 'john@example.com'
       end
 
       it 're-renders the :edit template' do

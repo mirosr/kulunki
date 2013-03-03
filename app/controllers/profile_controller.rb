@@ -29,8 +29,8 @@ class ProfileController < ApplicationController
 
   def change_email
     ensure_valid_password(params[:password], 'Given password was incorrect') do
-      ensure_valid_email(params[:email]) do
-        if current_user.deliver_change_email_instructions!(params[:email])
+      ensure_valid_email(params[:new_email]) do
+        if current_user.deliver_change_email_instructions!(params[:new_email])
           redirect_to profile_path, notice: 'An email with instructions was sent to you'
         else
           render_edit_with_alert('The new email is already taken')

@@ -26,8 +26,8 @@
 = form_tag profile_change_email_path, method: :put,
   id: :change_email, class: :change_email do |f|
   %p= "Current Email: #{current_user.email}"
-  = label_tag :email, 'New Email'
-  = text_field_tag :email
+  = label_tag :new_email, 'New Email'
+  = text_field_tag :new_email
   = label_tag :password, 'Password'
   = password_field_tag :password
   = submit_tag 'Change Email'
