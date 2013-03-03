@@ -5,6 +5,14 @@ feature 'User Profile' do
 
   it_behaves_like 'a protected page', :profile_path
 
+  def fill_in_edit_profile_form(username, name)
+    within 'form#edit_profile' do
+      fill_in 'Username', with: username
+      fill_in 'Name', with: name
+      click_button 'Save'
+    end
+  end
+
   scenario 'Show the user profile' do
     visit_protected_as profile_path, username: 'john',
       email: 'john@example.com', full_name: 'John Doe'
@@ -46,9 +54,7 @@ feature 'User Profile' do
 
     expect(current_path).to eq(edit_profile_path)
 
-    fill_in 'Username', with: 'jonathan'
-    fill_in 'Name', with: 'Jonathan Doe'
-    click_button 'Save'
+    fill_in_edit_profile_form('jonathan', 'Jonathan Doe')
 
     expect(current_path).to eq(profile_path)
     expect(page).to have_text 'Your personal data was updated successfully'
@@ -62,9 +68,9 @@ feature 'User Profile' do
 
     click_link 'Edit'
 
-    fill_in 'Username', with: ''
-    fill_in 'Name', with: 'Jonathan Doe'
-    click_button 'Save'
+    expect(current_path).to eq(edit_profile_path)
+
+    fill_in_edit_profile_form('', 'Jonathan Doe')
 
     expect(current_path).to eq(edit_profile_path)
     expect(page).to have_text 'Your personal data failed to update'
