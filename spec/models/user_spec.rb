@@ -87,6 +87,28 @@ describe User do
     end
   end
 
+  describe '.available_email?' do
+    context 'when there is no user with the given email' do
+      it 'returns true' do
+        return_value = User.available_email?('john@example.com')
+
+        expect(return_value).to be_a(TrueClass)
+        expect(return_value).to be_true
+      end
+    end
+
+    context 'when there is an user with the given email' do
+      it 'returns false' do
+        create(:user, email: 'john@example.com')
+
+        return_value = User.available_email?('john@example.com')
+
+        expect(return_value).to be_a(FalseClass)
+        expect(return_value).to be_false
+      end
+    end
+  end
+  
   describe '.reset_password_token_expired?' do
     context 'when reset_password_token_expires_at is in the past' do
       it 'returns true' do
@@ -164,6 +186,103 @@ describe User do
 
       user.update_personal_attributes(attributes_for(
         :user, username: 'john', full_name: 'John Doe'))
+    end
+  end
+
+  describe '#deliver_change_email_instructions!' do
+    let(:user) { build_stubbed(:user) }
+
+    context 'when model can be saved' do
+      before(:each) do
+        User.should_receive(:available_email?).with(
+          'john@example.com').once { true }
+        user.should_receive(:save) { true }
+      end
+
+      it 'updates change email db fields' do
+        current_token = generate(:sorcery_random_token)
+        after_48h = Time.now.in_time_zone + 172800
+        Sorcery::Model::TemporaryToken.should_receive(:generate_random_token) { current_token }
+
+        user.deliver_change_email_instructions!('john@example.com')
+
+        expect(user.change_email_token).to eq(current_token)
+        expect(user.change_email_token_expires_at).to be > after_48h
+        expect(user.change_email_new_value).to eq('john@example.com')
+      end
+
+      it 'sends change email instructions' do
+        mail = double
+        UserMailer.should_receive(:change_email_address_email).with(user).once { mail }
+        mail.should_receive(:deliver)
+
+        user.deliver_change_email_instructions!('john@example.com')
+      end
+
+      it 'returns true' do
+        mail = double
+        mail.stub(:deliver)
+        UserMailer.stub(:change_email_address_email) { mail }
+
+        expect(user.deliver_change_email_instructions!(
+          'john@example.com')).to be_true
+      end
+    end
+
+    context 'when model can not be saved' do
+      before(:each) do
+        User.should_receive(:available_email?).once { true }
+        user.should_receive(:save) { false }
+      end
+
+      it 'clears change email db fields' do
+        user.deliver_change_email_instructions!('john@example.com')
+
+        expect(user.change_email_token).to be_nil
+        expect(user.change_email_token_expires_at).to be_nil
+        expect(user.change_email_new_value).to be_nil
+      end
+
+      it 'does not send change email instructions' do
+        UserMailer.should_not_receive(:change_email_address_email).with(user)
+
+        user.deliver_change_email_instructions!('john@example.com')
+      end
+
+      it 'returns false' do
+        mail = double
+        mail.stub(:deliver)
+        UserMailer.stub(:change_email_address_email) { mail }
+
+        expect(user.deliver_change_email_instructions!('')).to be_false
+      end
+    end
+
+    context 'when the new email is not available' do
+      before(:each) do
+        User.should_receive(:available_email?).with(
+          'john@example.com').once { false }
+        user.should_not_receive(:save)
+      end
+
+      it 'does not update change email db fields' do
+        user.deliver_change_email_instructions!('john@example.com')
+
+        expect(user.change_email_token).to be_nil
+        expect(user.change_email_token_expires_at).to be_nil
+        expect(user.change_email_new_value).to be_nil
+      end
+
+      it 'does not send change email instructions' do
+        UserMailer.should_not_receive(:change_email_address_email).with(user)
+
+        user.deliver_change_email_instructions!('john@example.com')
+      end
+
+      it 'returns false' do
+        expect(user.deliver_change_email_instructions!(
+          'john@example.com')).to be_false
+      end
     end
   end
 

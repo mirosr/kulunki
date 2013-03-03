@@ -175,9 +175,13 @@ describe ProfileController do
       it 'sends the change email instructions' do
         current_user = build_stubbed(:user, username: 'john',
           password: 'john123')
-        User.should_receive(:authenticate).with('john', 'john123').once { current_user }
-        User.should_receive(:valid_email?).with('john@example.com').once { true }
-        current_user.stub(:deliver_change_email_instructions!).with('john@example.com').once { true }
+        User.should_receive(:authenticate).with(
+          'john', 'john123').once { current_user }
+        User.should_receive(:valid_email?).with(
+          'john@example.com').once { true }
+        current_user.should_receive(
+          :deliver_change_email_instructions!).with(
+          'john@example.com').once { true }
         login_user current_user
 
         put :change_email, email: 'john@example.com', password: 'john123'
@@ -212,10 +216,33 @@ describe ProfileController do
       let(:current_user) { build_stubbed(:user) }
       before(:each) do
         User.should_receive(:authenticate) { current_user }
-        current_user.stub(:deliver_change_email_instructions!) { false }
+        User.should_receive(:valid_email?).once { false }
         login_user current_user
 
         put :change_email
+      end
+
+      it 're-renders the :edit template' do
+        expect(response).to be_success
+        expect(response).to render_template :edit
+      end
+
+      it 'sets an alert message' do
+        expect(flash[:alert]).not_to be_blank
+      end
+    end
+
+    context 'when the email is already taken' do
+      let(:current_user) { current_user = build_stubbed(:user) }
+      before(:each) do
+        User.should_receive(:authenticate).once { current_user }
+        User.should_receive(:valid_email?).once { true }
+        current_user.should_receive(
+          :deliver_change_email_instructions!).with(
+          'john@example.com').once { false }
+        login_user current_user
+
+        put :change_email, email: 'john@example.com'
       end
 
       it 're-renders the :edit template' do

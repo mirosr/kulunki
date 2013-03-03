@@ -21,6 +21,10 @@ class User < ActiveRecord::Base
     !!(value =~ /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)
   end
 
+  def self.available_email?(value)
+    !find_by_email(value)
+  end
+
   def self.reset_password_token_expired?(value)
     user = find_by_reset_password_token(value)
     if user.present? && !user.reset_password_token_expires_at.nil?
@@ -44,6 +48,23 @@ class User < ActiveRecord::Base
 
   def update_personal_attributes(params)
     update_attributes(params.slice(:username, :full_name))
+  end
+
+  def deliver_change_email_instructions!(new_email)
+    return false if !self.class.available_email?(new_email)
+
+    self.change_email_token = TemporaryToken.generate_random_token
+    self.change_email_token_expires_at = Time.now.in_time_zone + 172800
+    self.change_email_new_value = new_email
+    if save
+      UserMailer.change_email_address_email(self).deliver
+      true
+    else
+      self.change_email_token = nil
+      self.change_email_token_expires_at = nil
+      self.change_email_new_value = nil
+      false
+    end
   end
 
   def change_email(email)
