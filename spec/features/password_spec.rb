@@ -13,6 +13,13 @@ feature 'Password Reset' do
     click_link 'Forgot password?'
   end
 
+  def fill_in_reset_password_form(email)
+    within 'form#reset_password' do
+      fill_in 'Email', with: email
+      click_button 'Reset Password'
+    end
+  end
+
   def fill_in_change_password_form(password, confirm_password)
     within 'form#change_password' do
       fill_in 'New Password', with: password
@@ -55,10 +62,7 @@ feature 'Password Reset' do
 
     visit_reset_password_path
 
-    within 'form#reset_password' do
-      fill_in 'Email', with: 'john@example.com'
-      click_button 'Reset Password'
-    end
+    fill_in_reset_password_form('john@example.com')
 
     user.reload
 
@@ -85,10 +89,7 @@ feature 'Password Reset' do
   scenario 'Show an alert message when entered email is invalid' do
     visit_reset_password_path
 
-    within 'form#reset_password' do
-      fill_in 'Email', with: 'invalid'
-      click_button 'Reset Password'
-    end
+    fill_in_reset_password_form('invalid')
 
     expect(current_path).to eq(reset_password_path)
     expect(page).to have_text 'The email address you provided was invalid. Please try again.'
@@ -100,10 +101,7 @@ feature 'Password Reset' do
 
     visit_reset_password_path
 
-    within 'form#reset_password' do
-      fill_in 'Email', with: 'nonexisting@example.com'
-      click_button 'Reset Password'
-    end
+    fill_in_reset_password_form('nonexisting@example.com')
 
     expect(current_path).to eq(reset_password_path)
     expect(page).to have_text 'An email with instructions was sent to you'
