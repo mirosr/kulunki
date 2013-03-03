@@ -216,6 +216,7 @@ describe PasswordController do
     context 'when reset password token is not valid' do
       before(:each) do
         User.stub(:load_from_reset_password_token) { nil }
+        User.stub(:reset_password_token_expired?) { false }
 
         put :update, token: 'invalid_token'
       end
