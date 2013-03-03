@@ -1,8 +1,10 @@
 module AuthHelper
   def fill_in_signin_form(username, password)
-    fill_in 'Username or Email', with: username
-    fill_in 'Password', with: password
-    click_button 'Sign In'
+    within 'form#new_session' do
+      fill_in 'Username or Email', with: username
+      fill_in 'Password', with: password
+      click_button 'Sign In'
+    end
   end
 
   def visit_protected(path)

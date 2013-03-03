@@ -26,7 +26,9 @@ feature 'Households' do
 
     expect(current_path).to eq(new_household_path)
 
-    fill_in 'Name', with: 'My household'
+    within 'form#new_household' do
+      fill_in 'Name', with: 'My household'
+    end
 
     expect{ click_button 'Save' }.to change{ Household.count }
     expect(current_path).to eq(profile_path)

@@ -13,10 +13,12 @@ feature 'Password Reset' do
     click_link 'Forgot password?'
   end
 
-  def fill_in_reset_password_form(password, confirm_password)
-    fill_in 'New Password', with: password
-    fill_in 'Confirm New Password', with: confirm_password
-    click_button 'Change Password'
+  def fill_in_change_password_form(password, confirm_password)
+    within 'form#change_password' do
+      fill_in 'New Password', with: password
+      fill_in 'Confirm New Password', with: confirm_password
+      click_button 'Change Password'
+    end
   end
 
   scenario 'An user sees the password reset form' do
@@ -53,8 +55,10 @@ feature 'Password Reset' do
 
     visit_reset_password_path
 
-    fill_in 'Email', with: 'john@example.com'
-    click_button 'Reset Password'
+    within 'form#reset_password' do
+      fill_in 'Email', with: 'john@example.com'
+      click_button 'Reset Password'
+    end
 
     user.reload
 
@@ -68,7 +72,7 @@ feature 'Password Reset' do
 
     visit change_password_path(user.reset_password_token)
 
-    fill_in_reset_password_form('secure_password', 'secure_password')
+    fill_in_change_password_form('secure_password', 'secure_password')
 
     expect(current_path).to eq(signin_path)
     expect(page).to have_text 'Your password has been changed'
@@ -81,8 +85,10 @@ feature 'Password Reset' do
   scenario 'Show an alert message when entered email is invalid' do
     visit_reset_password_path
 
-    fill_in 'Email', with: 'invalid'
-    click_button 'Reset Password'
+    within 'form#reset_password' do
+      fill_in 'Email', with: 'invalid'
+      click_button 'Reset Password'
+    end
 
     expect(current_path).to eq(reset_password_path)
     expect(page).to have_text 'The email address you provided was invalid. Please try again.'
@@ -94,8 +100,10 @@ feature 'Password Reset' do
 
     visit_reset_password_path
 
-    fill_in 'Email', with: 'nonexisting@example.com'
-    click_button 'Reset Password'
+    within 'form#reset_password' do
+      fill_in 'Email', with: 'nonexisting@example.com'
+      click_button 'Reset Password'
+    end
 
     expect(current_path).to eq(reset_password_path)
     expect(page).to have_text 'An email with instructions was sent to you'
@@ -122,7 +130,7 @@ feature 'Password Reset' do
 
     visit change_password_path(user.reset_password_token)
 
-    fill_in_reset_password_form('secure_password', 'password123')
+    fill_in_change_password_form('secure_password', 'password123')
 
     expect(current_path).to eq(change_password_path(user.reset_password_token))
     expect(page).to have_text "Password doesn't match confirmation"
@@ -134,7 +142,7 @@ feature 'Password Change' do
 
   def fill_in_change_password_form(current_password,
     password, password_confirmation)
-    within('form#change_password') do
+    within 'form#change_password' do
       fill_in 'Current Password', with: current_password
       fill_in 'password', with: password
       fill_in 'password_confirmation', with: password_confirmation
