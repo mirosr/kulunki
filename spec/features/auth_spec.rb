@@ -19,6 +19,8 @@ feature 'User sign up' do
   scenario 'An user sees the sign up form' do
     visit_signup_path
 
+    expect(current_path).to eq(signup_path)
+
     within 'header.page' do
       expect(page).to have_text 'Kulunki'
       expect(page).to have_text 'Please sign up to continue'
@@ -37,6 +39,8 @@ feature 'User sign up' do
 
     visit_signup_path
 
+    expect(current_path).to eq(signup_path)
+
     expect {
       fill_in_sign_up_form('john', 'john@example.com', 'john123')
     }.to change{ User.count }.by 1
@@ -48,6 +52,8 @@ feature 'User sign up' do
   scenario 'Show an alert messege when form params are invalid' do
     visit_signup_path
 
+    expect(current_path).to eq(signup_path)
+
     expect{ click_button 'Sign Up' }.not_to change{ User.count }
     expect(page).not_to have_text 'Welcome to Kulunki'
     expect(page).to have_text 'The following errors prevent your user of being saved:'
@@ -55,6 +61,8 @@ feature 'User sign up' do
 
   scenario 'The fist created user is granted with an admin role' do
     visit_signup_path
+
+    expect(current_path).to eq(signup_path)
 
     fill_in_sign_up_form('john', 'john@example.com', 'john123')
 
@@ -68,6 +76,8 @@ feature 'User sign in' do
 
   scenario 'An user sees the sign in form' do
     visit signin_path
+
+    expect(current_path).to eq(signin_path)
 
     within 'header.page' do
       expect(page).to have_text 'Kulunki'
@@ -88,6 +98,8 @@ feature 'User sign in' do
 
     visit signin_path
 
+    expect(current_path).to eq(signin_path)
+
     fill_in_signin_form('john', 'john123')
 
     expect(current_path).to eq(dashboard_path)
@@ -99,6 +111,8 @@ feature 'User sign in' do
 
     visit signin_path
 
+    expect(current_path).to eq(signin_path)
+
     fill_in_signin_form('john@example.com', 'john123')
 
     expect(current_path).to eq(dashboard_path)
@@ -107,6 +121,8 @@ feature 'User sign in' do
 
   scenario 'Show an alert message when entered credentials are invalid' do
     visit signin_path
+
+    expect(current_path).to eq(signin_path)
 
     click_button 'Sign In'
 

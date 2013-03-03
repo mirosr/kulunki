@@ -6,6 +6,8 @@ feature 'Main menu' do
   scenario 'Showing the main menu' do
     visit_protected root_path
 
+    expect(current_path).to eq(root_path)
+
     within 'nav.main' do
       expect(page).to have_link('Dashboard', href: dashboard_path)
       expect(page).to have_text 'Expenditures'

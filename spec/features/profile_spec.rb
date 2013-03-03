@@ -33,7 +33,11 @@ feature 'User Profile' do
 
     visit_protected_as_user profile_path, user
 
+    expect(current_path).to eq(profile_path)
+
     click_link 'Edit'
+
+    expect(current_path).to eq(edit_profile_path)
 
     within 'header.content' do
       expect(page).to have_text 'Edit Your Profile'
@@ -50,6 +54,8 @@ feature 'User Profile' do
     visit_protected_as profile_path, username: 'john',
       full_name: 'John Doe'
 
+    expect(current_path).to eq(profile_path)
+
     click_link 'Edit'
 
     expect(current_path).to eq(edit_profile_path)
@@ -65,6 +71,8 @@ feature 'User Profile' do
   scenario 'Show an alert message after failed update' do
     visit_protected_as profile_path, username: 'john',
       full_name: 'John Doe'
+
+    expect(current_path).to eq(profile_path)
 
     click_link 'Edit'
 
@@ -87,6 +95,7 @@ feature 'User Profile' do
 
     visit_protected_as_user profile_path, user
 
+    expect(current_path).to eq(profile_path)
     expect(page).to have_text "Co-members: #{co_members.join(', ')}"
   end
 end
@@ -110,7 +119,11 @@ feature 'Change email from profile' do
   scenario 'An user sees the change email form' do
     visit_protected_as profile_path, email: 'john@example.com'
 
+    expect(current_path).to eq(profile_path)
+
     click_link 'Edit'
+
+    expect(current_path).to eq(edit_profile_path)
 
     within 'header.content' do
       expect(page).to have_text 'Edit Your Profile'
@@ -128,6 +141,8 @@ feature 'Change email from profile' do
     user = create(:user, password: 'john123')
 
     visit_protected_as_user profile_path, user, 'john123'
+
+    expect(current_path).to eq(profile_path)
 
     click_link 'Edit'
 
@@ -150,6 +165,8 @@ feature 'Change email from profile' do
   scenario 'Show an alert message when new email is invalid' do
     visit_protected_as profile_path, password: 'john123'
 
+    expect(current_path).to eq(profile_path)
+
     click_link 'Edit'
 
     expect(current_path).to eq(edit_profile_path)
@@ -168,6 +185,8 @@ feature 'Change email from profile' do
 
     visit_protected_as profile_path, password: 'john123'
 
+    expect(current_path).to eq(profile_path)
+
     click_link 'Edit'
 
     expect(current_path).to eq(edit_profile_path)
@@ -184,6 +203,8 @@ feature 'Change email from profile' do
   scenario 'Show an alert message when password is invalid' do
     visit_protected_as profile_path, email: 'john@example.com',
       password: 'john123'
+
+    expect(current_path).to eq(profile_path)
 
     click_link 'Edit'
 

@@ -31,6 +31,8 @@ feature 'Password Reset' do
   scenario 'An user sees the password reset form' do
     visit_reset_password_path
 
+    expect(current_path).to eq(reset_password_path)
+
     within 'header.page' do
       expect(page).to have_text 'Kulunki'
       expect(page).to have_text 'Please enter email to reset your password'
@@ -45,6 +47,8 @@ feature 'Password Reset' do
     user = create(:user_with_reset_password_token)
 
     visit change_password_path(user.reset_password_token)
+
+    expect(current_path).to eq(change_password_path(user.reset_password_token))
 
     within 'header.page' do
       expect(page).to have_text 'Kulunki'
@@ -62,6 +66,8 @@ feature 'Password Reset' do
 
     visit_reset_password_path
 
+    expect(current_path).to eq(reset_password_path)
+
     fill_in_reset_password_form('john@example.com')
 
     user.reload
@@ -76,6 +82,8 @@ feature 'Password Reset' do
 
     visit change_password_path(user.reset_password_token)
 
+    expect(current_path).to eq(change_password_path(user.reset_password_token))
+
     fill_in_change_password_form('secure_password', 'secure_password')
 
     expect(current_path).to eq(signin_path)
@@ -89,6 +97,8 @@ feature 'Password Reset' do
   scenario 'Show an alert message when entered email is invalid' do
     visit_reset_password_path
 
+    expect(current_path).to eq(reset_password_path)
+
     fill_in_reset_password_form('invalid')
 
     expect(current_path).to eq(reset_password_path)
@@ -100,6 +110,8 @@ feature 'Password Reset' do
     create(:user, email: 'john@example.com')
 
     visit_reset_password_path
+
+    expect(current_path).to eq(reset_password_path)
 
     fill_in_reset_password_form('nonexisting@example.com')
 
@@ -128,6 +140,8 @@ feature 'Password Reset' do
 
     visit change_password_path(user.reset_password_token)
 
+    expect(current_path).to eq(change_password_path(user.reset_password_token))
+
     fill_in_change_password_form('secure_password', 'password123')
 
     expect(current_path).to eq(change_password_path(user.reset_password_token))
@@ -151,7 +165,11 @@ feature 'Password Change' do
   scenario 'An user sees the change password form' do
     visit_protected profile_path
 
+    expect(current_path).to eq(profile_path)
+
     click_link 'Edit'
+
+    expect(current_path).to eq(edit_profile_path)
 
     within 'header.content' do
       expect(page).to have_text 'Edit Your Profile'
@@ -168,6 +186,8 @@ feature 'Password Change' do
   scenario 'An user changes his password successfully' do
     visit_protected_as profile_path, username: 'john', password: 'john123'
 
+    expect(current_path).to eq(profile_path)
+
     click_link 'Edit'
 
     expect(current_path).to eq(edit_profile_path)
@@ -179,6 +199,8 @@ feature 'Password Change' do
 
     visit signout_path
 
+    expect(current_path).to eq(signin_path)
+
     fill_in_signin_form('john', 'new1234')
 
     expect(page).to have_text 'john'
@@ -186,6 +208,8 @@ feature 'Password Change' do
 
   scenario 'Show an alert message when current password is invalid' do
     visit_protected_as profile_path, username: 'john', password: 'john123'
+
+    expect(current_path).to eq(profile_path)
 
     click_link 'Edit'
 
@@ -199,6 +223,8 @@ feature 'Password Change' do
 
   scenario "Show an alert message when new passwords don't match" do
     visit_protected_as profile_path, username: 'john', password: 'john123'
+
+    expect(current_path).to eq(profile_path)
 
     click_link 'Edit'
 

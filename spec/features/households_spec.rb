@@ -8,7 +8,11 @@ feature 'Households' do
   scenario 'An user sees the create household form' do
     visit_protected profile_path
 
+    expect(current_path).to eq(profile_path)
+
     click_link 'Create New Household'
+
+    expect(current_path).to eq(new_household_path)
 
     within 'header.content' do
       expect(page).to have_text 'Create New Household'
@@ -21,6 +25,8 @@ feature 'Households' do
 
   scenario 'The user creates a household if he is still not a member of any' do
     visit_protected profile_path
+
+    expect(current_path).to eq(profile_path)
 
     click_link 'Create New Household'
 
@@ -40,7 +46,11 @@ feature 'Households' do
   scenario 'Show an alert message after failed create' do
     visit_protected profile_path
 
+    expect(current_path).to eq(profile_path)
+
     click_link 'Create New Household'
+
+    expect(current_path).to eq(new_household_path)
 
     expect{ click_button 'Save' }.not_to change{ Household.count }
     expect(current_path).to eq(households_path)
