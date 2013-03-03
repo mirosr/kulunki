@@ -30,6 +30,18 @@ FactoryGirl.define do
       reset_password_email_sent_at { 2.weeks.ago }
     end
 
+    factory :user_with_change_email_token do
+      change_email_token { generate(:sorcery_random_token) }
+      change_email_token_expires_at { 1.week.from_now }
+      change_email_new_value { Forgery(:email).address }
+    end
+
+    factory :user_with_expired_change_email_token do
+      change_email_token { generate(:sorcery_random_token) }
+      change_email_token_expires_at { 1.week.ago }
+      change_email_new_value { Forgery(:email).address }
+    end
+
     factory :user_head_of_household do
       association :household, factory: :household, strategy: :build
 

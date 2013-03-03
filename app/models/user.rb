@@ -34,6 +34,25 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.load_from_change_email_token(value)
+    user = find_by_change_email_token(value)
+    if user.present? && user.change_email_token_expires_at >
+      Time.now.in_time_zone
+      user
+    else
+      nil
+    end
+  end
+
+  def self.change_email_token_expired?(value)
+    user = find_by_change_email_token(value)
+    if user.present? && !user.change_email_token_expires_at.nil?
+      user.change_email_token_expires_at < Time.now.in_time_zone
+    else
+      false
+    end
+  end
+
   def admin?
     role == 'admin'
   end
@@ -67,8 +86,13 @@ class User < ActiveRecord::Base
     end
   end
 
-  def change_email(email)
-    self.email = email
-    save
+  def change_email
+    if change_email_new_value.present?
+      self.email = change_email_new_value
+      self.change_email_token = nil
+      self.change_email_token_expires_at = nil
+      self.change_email_new_value = nil
+      save
+    end
   end
 end

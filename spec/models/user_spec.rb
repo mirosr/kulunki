@@ -138,6 +138,63 @@ describe User do
     end
   end
 
+  describe '.load_from_change_email_token' do
+    context 'when token is valid' do
+      it 'returns an user' do
+        user = create(:user_with_change_email_token)
+
+        expect(User.load_from_change_email_token(
+          user.change_email_token)).to eq(user)
+      end
+    end
+
+    context 'when token is not valid' do
+      it 'returns nil' do
+        user = create(:user_with_change_email_token)
+
+        expect(User.load_from_change_email_token('invalid_token')).to be_nil
+      end
+    end
+    
+    context 'when token has expired' do
+      it 'returns nil' do
+        user = create(:user_with_expired_change_email_token)
+
+        expect(User.load_from_change_email_token(
+          user.change_email_token)).to be_nil
+      end
+    end
+  end
+
+  describe '.change_email_token_expired?' do
+    context 'when change_email_token_expires_at is in the past' do
+      it 'returns true' do
+        user = create(:user_with_expired_change_email_token)
+
+        expect(User.change_email_token_expired?(
+          user.change_email_token)).to be_true
+      end
+    end
+
+    context 'when change_email_token_expires_at is in the future' do
+      it 'returns false' do
+        user = create(:user_with_change_email_token)
+
+        expect(User.change_email_token_expired?(
+          user.change_email_token)).to be_false
+      end
+    end
+
+    context 'when change_email_token_expires_at is nil' do
+      it 'returns false' do
+        user = create(:user)
+
+        expect(User.change_email_token_expired?(
+          user.change_email_token)).to be_false
+      end
+    end
+  end
+
   describe '#admin?' do
     context 'when the user role is admin' do
       it 'returns true' do
@@ -287,12 +344,37 @@ describe User do
   end
 
   describe '#change_email' do
-    it 'updates only email attribute' do
-      user = build_stubbed(:user)
-      user.should_receive(:email=).with('john@example.com').once
-      user.should_receive(:save).once
+    context 'when change email token is set' do
+      it 'updates only email attribute' do
+        user = build_stubbed(:user_with_change_email_token,
+          change_email_new_value: 'john@example.com')
+        user.should_receive(:email=).with('john@example.com').once
+        user.should_receive(:save).once
 
-      user.change_email('john@example.com')
+        user.change_email
+      end
+
+      it 'clears the change email token' do
+        user = build_stubbed(:user_with_change_email_token)
+        user.stub(:save) { true }
+
+        user.change_email
+
+        expect(user.change_email_token).to be_nil
+        expect(user.change_email_token_expires_at).to be_nil
+      end
+    end
+
+    context 'when change email token is not set' do
+      it 'does not update the email attribute' do
+        user = build_stubbed(:user, email: 'john@example.com')
+        user.should_not_receive(:email=)
+        user.should_not_receive(:save)
+
+        user.change_email
+
+        expect(user.email).to eq('john@example.com')
+      end
     end
   end
 end
