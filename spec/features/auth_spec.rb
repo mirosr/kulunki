@@ -21,7 +21,7 @@ feature 'User sign up' do
 
     expect(current_path).to eq(signup_path)
 
-    within 'header.page' do
+    within 'section.auth' do
       expect(page).to have_text 'Kulunki'
       expect(page).to have_text 'Please sign up to continue'
     end
@@ -79,7 +79,7 @@ feature 'User sign in' do
 
     expect(current_path).to eq(signin_path)
 
-    within 'header.page' do
+    within 'section.auth' do
       expect(page).to have_text 'Kulunki'
       expect(page).to have_text 'Please sign in to continue'
     end

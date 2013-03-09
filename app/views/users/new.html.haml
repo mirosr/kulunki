@@ -1,6 +1,5 @@
-- content_for :page_header do
-  %h1
-    Kulunki » Please sign up to continue
+- content_for :content_title do
+  Kulunki » Please sign up to continue
 
 -if @user.errors.present?
   .errors
