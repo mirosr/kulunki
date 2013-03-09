@@ -8,8 +8,9 @@
   %body
     %header.page
       = render 'shared/header'
-    %nav.main
-      = render 'shared/nav'
-    %section.content
-      = yield :content_title
-      = yield
+    %section.page
+      %nav.main
+        = render 'shared/nav'
+      %section.content
+        = yield :content_title
+        = yield

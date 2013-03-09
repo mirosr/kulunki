@@ -1,0 +1,22 @@
+header.page
+  @include outer-container
+  height: $column
+  .breadcrumb_nav
+    @include span-columns(8)
+  .username
+    @include span-columns(2)
+  .signout
+    @include span-columns(2)
+
+section.page
+  @include outer-container
+
+nav.main
+  @include span-columns(2)
+  a.nav_item
+    @include size(2 * $column - $gutter)
+    display: block
+    margin: $gutter
+
+section.content
+  @include span-columns(10)
