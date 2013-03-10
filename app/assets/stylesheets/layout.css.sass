@@ -1,9 +1,21 @@
 $light_bgc: #c2c3bc
 $dark_bgc: #333333
+$white_on_dark_c: #c2c3bc
+
+@mixin rounded
+  border-radius: 6px
 
 @mixin nav-panel
-  border-radius: 6px
+  @include rounded
   background-color: $dark_bgc
+  color: $white_on_dark_c
+  a
+    color: $white_on_dark_c
+    text-decoration: none
+    &:hover
+      @include rounded
+      background-color: #595553
+      color: #d8664c
 
 body
   background-color: $light_bgc
@@ -12,14 +24,35 @@ body
 header.page
   @include outer-container
   @include nav-panel
-  height: $column
   margin: em(10) auto
-  .breadcrumb_nav
+  ul.breadcrumb_nav
     @include span-columns(8)
-  .username
+    padding: em(15)
+    margin-top: 0
+    margin-bottom: 0
+    li
+      float: left
+      display: block
+      border-right: 1px solid $white_on_dark_c
+      list-style: none
+      padding-right: em(10)
+      margin-right: em(10)
+      &:last-child
+        padding-right: 0
+        margin-right: 0
+        border-right: none
+  a.username
     @include span-columns(2)
-  .signout
+    text-align: center
+    padding: em(15)
+    margin-top: 0
+    margin-bottom: 0
+  a.signout
     @include span-columns(2)
+    text-align: center
+    padding: em(15)
+    margin-top: 0
+    margin-bottom: 0
 
 section.page
   @include outer-container
@@ -32,12 +65,7 @@ nav.main
     size: 5em
   a.nav_item
     display: block
-    color: white
-    text:
-      decoration: none
-      align: center
-    &:hover
-      color: #d8664c
+    text-align: center
   a.dashboard
     &:before
       content: '\1f6c7'

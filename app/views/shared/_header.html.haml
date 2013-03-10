@@ -1,4 +1,10 @@
-.breadcrumb_nav
-  Kulunki » Household Name » Current Period
-.username= link_to current_user.username, profile_path
-.signout= link_to 'Sign Out', signout_path
+%ul.breadcrumb_nav
+  %li
+    Kulunki
+  %li
+    Household Name
+  %li
+    Current Period
+
+= link_to current_user.username, profile_path, class: :username
+= link_to 'Sign Out', signout_path, class: :signout
