@@ -6,5 +6,12 @@
   %li
     Current Period
 
-= link_to current_user.username, profile_path, class: :username
-= link_to 'Sign Out', signout_path, class: :signout
+%nav.profile
+  %ul
+    %li
+      = link_to profile_path do
+        %span.username
+        = current_user.username
+      %ul
+        %li
+          = link_to 'Sign Out', signout_path, class: :signout

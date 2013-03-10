@@ -17,6 +17,14 @@ $white_on_dark_c: #c2c3bc
       background-color: #595553
       color: #d8664c
 
+@mixin entypo($size)
+  font:
+    family: 'Entypo'
+    size: $size
+@mixin entypo-char($char)
+  &:before
+    content: $char
+
 body
   background-color: $light_bgc
   font-family: 'DejaVu Sans', Verdana, Geneva, sans-serif
@@ -26,33 +34,53 @@ header.page
   @include nav-panel
   margin: em(10) auto
   ul.breadcrumb_nav
-    @include span-columns(8)
-    padding: em(15)
+    @include span-columns(10)
+    height: $column
+    line-height: $column
+    padding-left: $gutter
     margin-top: 0
     margin-bottom: 0
     li
       float: left
       display: block
-      border-right: 1px solid $white_on_dark_c
       list-style: none
-      padding-right: em(10)
-      margin-right: em(10)
+      padding-right: $gutter/2
+      margin-right: $gutter/2
       &:last-child
         padding-right: 0
         margin-right: 0
-        border-right: none
-  a.username
+  nav.profile
     @include span-columns(2)
-    text-align: center
-    padding: em(15)
-    margin-top: 0
-    margin-bottom: 0
-  a.signout
-    @include span-columns(2)
-    text-align: center
-    padding: em(15)
-    margin-top: 0
-    margin-bottom: 0
+    float: right
+    height: $column
+    ul
+      @include fill-parent
+      position: relative
+      display: inline-table
+      list-style: none
+      padding: 0
+      margin: 0
+      &:after
+        content: ""
+        clear: both
+        display: block
+      li
+        @include fill-parent
+        float: left
+        text-align: center
+        &:hover > ul
+          display: block
+        a
+          display: block
+          height: $column
+          line-height: $column
+        span.username
+          @include entypo(2em)
+          @include entypo-char('\1f464')
+      ul
+        @include rounded
+        display: none
+        background-color: $dark_bgc
 
 section.page
   @include outer-container
@@ -60,27 +88,20 @@ section.page
 nav.main
   @include span-columns(2)
   @include nav-panel
-  font:
-    family: 'Entypo'
-    size: 5em
+  @include entypo(5em)
   a.nav_item
     display: block
     text-align: center
   a.dashboard
-    &:before
-      content: '\1f6c7'
+    @include entypo-char('\1f6c7')
   a.expenditures
-    &:before
-      content: '\1f4d6'
+    @include entypo-char('\1f4d6')
   a.groups
-    &:before
-      content: '\1f568'
+    @include entypo-char('\1f568')
   a.reports
-    &:before
-      content: '\e800'
+    @include entypo-char('\e800')
   a.admin_panel
-    &:before
-      content: '\1f511'
+    @include entypo-char('\1f511')
 
 section.content
   @include span-columns(10)
