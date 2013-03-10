@@ -9,11 +9,11 @@ feature 'Main menu' do
     expect(current_path).to eq(root_path)
 
     within 'nav.main' do
-      expect(page).to have_link('Dashboard', href: dashboard_path)
-      expect(page).to have_text 'Expenditures'
-      expect(page).to have_text 'Groups'
-      expect(page).to have_text 'Reports'
-      expect(page).to have_text 'Admin Panel'
+      expect(page).to have_css "a.dashboard[href='#{dashboard_path}']"
+      expect(page).to have_css "a.expenditures[href='#{root_path}']"
+      expect(page).to have_css "a.groups[href='#{root_path}']"
+      expect(page).to have_css "a.reports[href='#{root_path}']"
+      expect(page).to have_css "a.admin_panel[href='#{root_path}']"
     end
   end
 end

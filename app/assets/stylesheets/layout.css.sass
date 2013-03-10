@@ -1,6 +1,19 @@
+$light_bgc: #c2c3bc
+$dark_bgc: #333333
+
+@mixin nav-panel
+  border-radius: 6px
+  background-color: $dark_bgc
+
+body
+  background-color: $light_bgc
+  font-family: 'DejaVu Sans', Verdana, Geneva, sans-serif
+
 header.page
   @include outer-container
+  @include nav-panel
   height: $column
+  margin: em(10) auto
   .breadcrumb_nav
     @include span-columns(8)
   .username
@@ -13,10 +26,33 @@ section.page
 
 nav.main
   @include span-columns(2)
+  @include nav-panel
+  font:
+    family: 'Entypo'
+    size: 5em
   a.nav_item
-    @include size(2 * $column - $gutter)
     display: block
-    margin: $gutter
+    color: white
+    text:
+      decoration: none
+      align: center
+    &:hover
+      color: #d8664c
+  a.dashboard
+    &:before
+      content: '\1f6c7'
+  a.expenditures
+    &:before
+      content: '\1f4d6'
+  a.groups
+    &:before
+      content: '\1f568'
+  a.reports
+    &:before
+      content: '\e800'
+  a.admin_panel
+    &:before
+      content: '\1f511'
 
 section.content
   @include span-columns(10)
