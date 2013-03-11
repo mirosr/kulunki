@@ -14,4 +14,12 @@
         = current_user.username
       %ul
         %li
-          = link_to 'Sign Out', signout_path, class: :signout
+          = link_to root_path, class: :nav_item do
+            %span.notifications
+            Notifications
+          = link_to root_path, class: :nav_item do
+            %span.admin_panel
+            Admin Panel
+          = link_to signout_path, class: :signout do
+            %span.signout
+            Sign Out

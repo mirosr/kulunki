@@ -81,6 +81,17 @@ header.page
         @include rounded
         display: none
         background-color: $dark_bgc
+        a
+          font-size: 0.8em
+          .notifications
+            @include entypo(2em)
+            @include entypo-char('\e718')
+          .admin_panel
+            @include entypo(2em)
+            @include entypo-char('\1f511')
+          .signout
+            @include entypo(2em)
+            @include entypo-char('\e715')
 
 section.page
   @include outer-container
@@ -100,8 +111,6 @@ nav.main
     @include entypo-char('\1f568')
   a.reports
     @include entypo-char('\e800')
-  a.admin_panel
-    @include entypo-char('\1f511')
 
 section.content
   @include span-columns(10)
