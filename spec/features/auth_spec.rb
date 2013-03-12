@@ -22,8 +22,7 @@ feature 'User sign up' do
     expect(current_path).to eq(signup_path)
 
     within 'section.auth' do
-      expect(page).to have_text 'Kulunki'
-      expect(page).to have_text 'Please sign up to continue'
+      expect(page).to have_text 'Please fill out the form'
     end
     within 'form#new_user' do
       expect(page).to have_field 'Username'

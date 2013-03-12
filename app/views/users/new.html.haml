@@ -1,5 +1,5 @@
 - content_for :content_title do
-  Kulunki » Please sign up to continue
+  Please fill out the form
 
 -if @user.errors.present?
   .errors
@@ -9,9 +9,10 @@
       - @user.errors.full_messages.each do |message|
         %li= message
 
-= form_for @user do |f|
-  = f.text_field :username, placeholder: 'Username'
+= form_for @user, class: :auth do |f|
+  = f.text_field :username, placeholder: 'Username', autofocus: true
   = f.email_field :email, placeholder: 'Email'
   = f.password_field :password, placeholder: 'Password'
   = f.password_field :password_confirmation, placeholder: 'Confirm Password'
-  = f.button 'Sign Up'
+  .row
+    = f.button 'Sign Up'
