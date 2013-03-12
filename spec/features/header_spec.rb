@@ -15,17 +15,16 @@ feature 'Page Header' do
     end
   end
 
-  scenario 'Show the link to user profile' do
+  scenario 'Showing the profile navigation' do
     visit_protected_as root_path, username: 'john'
 
     expect(current_path).to eq(root_path)
+
     expect(page).to have_link 'john', href: profile_path
-  end
-
-  scenario 'Show the signout link' do
-    visit_protected root_path
-
-    expect(current_path).to eq(root_path)
-    expect(page).to have_link('Sign Out', href: signout_path)
+    within 'nav.profile' do
+      expect(page).to have_link('Notifications', href: root_path)
+      expect(page).to have_link('Admin Panel', href: root_path)
+      expect(page).to have_link('Sign Out', href: signout_path)
+    end
   end
 end

@@ -13,7 +13,6 @@ feature 'Main menu' do
       expect(page).to have_css "a.expenditures[href='#{root_path}']"
       expect(page).to have_css "a.groups[href='#{root_path}']"
       expect(page).to have_css "a.reports[href='#{root_path}']"
-      expect(page).to have_css "a.admin_panel[href='#{root_path}']"
     end
   end
 end
