@@ -84,5 +84,8 @@ module Kulunki
         request_specs: true
       g.fixture_replacement :factory_girl, dir: 'spec/factories'
     end
+
+    # Prevent connecting to the database while precompiling assets
+    config.assets.initialize_on_precompile = false
   end
 end
