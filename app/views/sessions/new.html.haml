@@ -1,5 +1,5 @@
 - content_for :content_title do
-  Kulunki » Please sign in to continue
+  Please sign in to continue
 
 - if notice.present?
   .notice= notice
@@ -7,10 +7,12 @@
   .alert= alert
 
 = form_tag signin_path, id: :new_session do
-  = text_field_tag :username, nil, placeholder: 'Username or Email'
+  = text_field_tag :username, nil, placeholder: 'Username or Email', autofocus: true
   = password_field_tag :password, nil, placeholder: 'Password'
-  = check_box_tag :remember_me
-  = label_tag :remember_me, 'Remember Me'
-  = link_to 'Forgot password?', reset_password_path
-  = link_to 'Sign Up', signup_path
-  = submit_tag 'Sign In'
+  .row
+    = check_box_tag :remember_me
+    = label_tag :remember_me, 'Remember Me'
+    = button_tag 'Sign In'
+  .row
+    = link_to 'Forgotten your password?', reset_password_path, class: :forgot_password
+    = link_to "Don't have an account? Sign Up", signup_path, class: :sign_up

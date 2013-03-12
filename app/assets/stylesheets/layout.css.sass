@@ -5,8 +5,12 @@ $white_on_dark_c: #c2c3bc
 @mixin rounded
   border-radius: 6px
 
-@mixin nav-panel
+@mixin dark-panel-shadow
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5)
+
+@mixin dark-panel
   @include rounded
+  @include dark-panel-shadow
   background-color: $dark_bgc
   color: $white_on_dark_c
   a
@@ -14,8 +18,13 @@ $white_on_dark_c: #c2c3bc
     text-decoration: none
     &:hover
       @include rounded
-      background-color: #595553
       color: #d8664c
+
+@mixin nav-panel
+  @include dark-panel
+  a
+    &:hover
+      background-color: #595553
 
 @mixin entypo($size)
   font:
@@ -25,9 +34,49 @@ $white_on_dark_c: #c2c3bc
   &:before
     content: $char
 
+@mixin small-text
+  font-size: 0.8em
+
 body
   background-color: $light_bgc
+  // background-image: -moz-radial-gradient(center, circle farthest-side, #c2c3bc 0%, #464646 100%)
   font-family: 'DejaVu Sans', Verdana, Geneva, sans-serif
+
+section.auth
+  width: 6 * $column + 5 * $gutter
+  margin: 0 auto
+  h1
+    @include dark-panel
+    font-size: 1.6em
+    padding: $gutter / 2
+  form#new_session
+    @include dark-panel
+    padding: $gutter / 2
+    input
+      @include fill-parent
+      border-radius: 4px
+      border: none
+      background-color: $light_bgc
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) inset
+      font-size: 1.5em
+      padding: em(5)
+      margin-bottom: em(10)
+    button
+      @include button(shiny, #66ba41)
+      @include span-columns(3 of 6)
+      @include omega
+      float: right
+      height: $column
+    .row
+      @include clearfix
+    .forgot_password
+      @include small-text
+      float: left
+      margin-top: em(15)
+    .sign_up
+      @include small-text
+      float: right
+      margin-top: em(15)
 
 header.page
   @include outer-container
@@ -77,21 +126,22 @@ header.page
         span.username
           @include entypo(2em)
           @include entypo-char('\1f464')
-      ul
-        @include rounded
-        display: none
-        background-color: $dark_bgc
-        a
-          font-size: 0.8em
-          .notifications
-            @include entypo(2em)
-            @include entypo-char('\e718')
-          .admin_panel
-            @include entypo(2em)
-            @include entypo-char('\1f511')
-          .signout
-            @include entypo(2em)
-            @include entypo-char('\e741')
+        ul
+          @include rounded
+          @include dark-panel-shadow
+          display: none
+          background-color: $dark_bgc
+          a
+            @include small-text
+            .notifications
+              @include entypo(2em)
+              @include entypo-char('\e718')
+            .admin_panel
+              @include entypo(2em)
+              @include entypo-char('\1f511')
+            .signout
+              @include entypo(2em)
+              @include entypo-char('\e741')
 
 section.page
   @include outer-container

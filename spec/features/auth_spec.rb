@@ -80,14 +80,13 @@ feature 'User sign in' do
     expect(current_path).to eq(signin_path)
 
     within 'section.auth' do
-      expect(page).to have_text 'Kulunki'
       expect(page).to have_text 'Please sign in to continue'
     end
     within 'form#new_session' do
       expect(page).to have_field 'Username or Email'
       expect(page).to have_field 'Password'
       expect(page).to have_field 'Remember Me'
-      expect(page).to have_link 'Forgot password?', href: reset_password_path
+      expect(page).to have_link 'Forgotten your password?', href: reset_password_path
       expect(page).to have_link 'Sign Up', href: signup_path
       expect(page).to have_button 'Sign In'
     end

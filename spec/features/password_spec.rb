@@ -10,7 +10,7 @@ feature 'Password Reset' do
 
   def visit_reset_password_path
     visit signin_path
-    click_link 'Forgot password?'
+    click_link 'Forgotten your password?'
   end
 
   def fill_in_reset_password_form(email)
