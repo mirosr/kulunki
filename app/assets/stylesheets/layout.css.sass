@@ -37,6 +37,19 @@ $white_on_dark_c: #c2c3bc
 @mixin small-text
   font-size: 0.8em
 
+@mixin message($border_c, $bgc, $c)
+  @include small-text
+  border-radius: 3px
+  border: 1px solid $border_c
+  background-color: $bgc
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5)
+  color: $c
+  padding: em(5)
+  margin-bottom: em(20)
+
+.notice
+  @include message(#40522d, #8aba56, #303132)
+
 body
   background-color: $light_bgc
   // background-image: -moz-radial-gradient(center, circle farthest-side, #c2c3bc 0%, #464646 100%)
