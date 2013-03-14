@@ -55,7 +55,7 @@ feature 'User sign up' do
 
     expect{ click_button 'Sign Up' }.not_to change{ User.count }
     expect(page).not_to have_text 'Welcome to Kulunki'
-    expect(page).to have_text 'The following errors prevent your user of being saved:'
+    expect(page).to have_text 'errors prohibited your user of being saved:'
   end
 
   scenario 'The fist created user is granted with an admin role' do

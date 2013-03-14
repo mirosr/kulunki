@@ -34,7 +34,6 @@ feature 'Password Reset' do
     expect(current_path).to eq(reset_password_path)
 
     within 'section.auth' do
-      expect(page).to have_text 'Kulunki'
       expect(page).to have_text 'Please enter email to reset your password'
     end
     within 'form#reset_password' do
@@ -51,7 +50,6 @@ feature 'Password Reset' do
     expect(current_path).to eq(change_password_path(user.reset_password_token))
 
     within 'section.auth' do
-      expect(page).to have_text 'Kulunki'
       expect(page).to have_text 'Please enter a new password'
     end
     within 'form#change_password' do

@@ -1,10 +1,9 @@
 - content_for :content_title do
   Please fill out the form
 
--if @user.errors.present?
+-if @user.errors.any?
   .errors
-    %h3
-      The following errors prevent your user of being saved:
+    %h3= "#{pluralize(@user.errors.count, 'error')} prohibited your user of being saved:"
     %ul
       - @user.errors.full_messages.each do |message|
         %li= message
