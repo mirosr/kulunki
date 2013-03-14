@@ -4,11 +4,7 @@
 = render_flash_messages
 
 - if @user.errors.any?
-  .errors
-    %h3= "#{pluralize(@user.errors.count, 'error')} prohibited your password from being changed:"
-    %ul
-      - @user.errors.full_messages.each do |msg|
-        %li= msg
+  = render_model_errors(@user)
 
 = form_tag change_password_path, id: :change_password, class: :dark, method: :put do
   = password_field_tag :password, nil, placeholder: 'New Password', autofocus: true

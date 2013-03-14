@@ -1,12 +1,8 @@
 - content_for :content_title do
   Please fill out the form
 
--if @user.errors.any?
-  .errors
-    %h3= "#{pluralize(@user.errors.count, 'error')} prohibited your user of being saved:"
-    %ul
-      - @user.errors.full_messages.each do |message|
-        %li= message
+- if @user.errors.any?
+  = render_model_errors(@user)
 
 = form_for @user, html: {class: :dark} do |f|
   = f.text_field :username, placeholder: 'Username', autofocus: true

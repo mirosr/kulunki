@@ -1,0 +1,5 @@
+.errors
+  %h3= "#{pluralize(@user.errors.count, 'error')} prohibited your #{model.class.name.downcase} from being saved:"
+  %ul
+    - model.errors.full_messages.each do |msg|
+      %li= msg

@@ -6,4 +6,8 @@ module ApplicationHelper
     end
     divs.html_safe
   end
+
+  def render_model_errors(model)
+    render 'shared/model_errors', model: model
+  end
 end
