@@ -1,8 +1,7 @@
 - content_for :content_title do
   Please enter a new password
 
-- if alert.present?
-  .alert= alert
+= render_flash_messages
 
 - if @user.errors.any?
   .errors

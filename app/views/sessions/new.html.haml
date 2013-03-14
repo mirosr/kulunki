@@ -1,10 +1,7 @@
 - content_for :content_title do
   Please sign in to continue
 
-- if notice.present?
-  .notice= notice
-- if alert.present?
-  .alert= alert
+= render_flash_messages
 
 = form_tag signin_path, id: :new_session, class: :dark do
   = text_field_tag :username, nil, placeholder: 'Username or Email', autofocus: true

@@ -2,8 +2,7 @@
   %header.content
     %h1 Edit Your Profile
 
-- if alert.present?
-  .alert= alert
+= render_flash_messages
 
 = form_for current_user, url: edit_profile_path, method: :put,
   html: {id: :edit_profile, class: :edit_profile} do |f|

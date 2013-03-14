@@ -2,8 +2,7 @@
   %header.content
     %h1 Your Profile
 
-- if notice.present?
-  .notice= notice
+= render_flash_messages
 
 %p= "Email: #{current_user.email}"
 %p= "Username: #{current_user.username}"

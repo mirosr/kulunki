@@ -2,7 +2,4 @@
   %header.content
     %h1 Dashboard
 
-- if notice.present?
-  .notice= notice
-- if alert.present?
-  .alert= alert
+= render_flash_messages

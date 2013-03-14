@@ -2,8 +2,7 @@
   %header.content
     %h1 Create New Household
 
-- if alert.present?
-  .alert= alert
+= render_flash_messages
 
 = form_for @household do |f|
   = f.label :name

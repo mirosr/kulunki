@@ -1,10 +1,7 @@
 - content_for :content_title do
   Please enter email to reset your password
 
-- if notice.present?
-  .notice= notice
-- if alert.present?
-  .alert= alert
+= render_flash_messages
 
 = form_tag reset_password_path, id: :reset_password, class: :dark do
   = email_field_tag :email, nil, placeholder: 'Email', autofocus: true
