@@ -6,7 +6,7 @@
 - if alert.present?
   .alert= alert
 
-= form_tag signin_path, id: :new_session do
+= form_tag signin_path, id: :new_session, class: :dark do
   = text_field_tag :username, nil, placeholder: 'Username or Email', autofocus: true
   = password_field_tag :password, nil, placeholder: 'Password'
   .row

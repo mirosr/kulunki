@@ -11,7 +11,7 @@
       - @user.errors.full_messages.each do |msg|
         %li= msg
 
-= form_tag change_password_path, id: :change_password, method: :put do
+= form_tag change_password_path, id: :change_password, class: :dark, method: :put do
   = password_field_tag :password, nil, placeholder: 'New Password', autofocus: true
   = password_field_tag :password_confirmation, nil, placeholder: 'Confirm New Password'
   .row
