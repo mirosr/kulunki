@@ -2,4 +2,5 @@
   %header.content
     %h1 Dashboard
 
-= render_flash_messages
+- if flash.any?
+  = render_flash_messages

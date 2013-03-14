@@ -1,7 +1,8 @@
 - content_for :content_title do
   Please enter a new password
 
-= render_flash_messages
+- if flash.any?
+  = render_flash_messages
 
 - if @user.errors.any?
   = render_model_errors(@user)

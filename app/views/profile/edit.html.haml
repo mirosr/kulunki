@@ -2,7 +2,8 @@
   %header.content
     %h1 Edit Your Profile
 
-= render_flash_messages
+- if flash.any?
+  = render_flash_messages
 
 = form_for current_user, url: edit_profile_path, method: :put,
   html: {id: :edit_profile, class: :edit_profile} do |f|
