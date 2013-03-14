@@ -3,7 +3,7 @@
 
 -if @user.errors.present?
   .errors
-    %h2
+    %h3
       The following errors prevent your user of being saved:
     %ul
       - @user.errors.full_messages.each do |message|
