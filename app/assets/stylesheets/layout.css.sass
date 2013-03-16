@@ -40,12 +40,21 @@ $white_on_dark_c: #c2c3bc
 @mixin message($border_c, $bgc, $c)
   @include rounded
   @include small-text
+  @include dark-panel-shadow
   border: 1px solid $border_c
   background-color: $bgc
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5)
   color: $c
   padding: em(10)
   margin-bottom: em(20)
+
+@mixin input-box-shadow($color)
+  box-shadow: 0 0 10px $color inset
+
+@mixin dark-input-box-shadow
+  @include input-box-shadow(rgba(0, 0, 0, 0.5))
+
+@mixin red-input-box-shadow
+  @include input-box-shadow(#da5a40)
 
 .notice
   @include message(#40522d, #8aba56, #303132)
@@ -68,18 +77,18 @@ section.auth
   margin: 0 auto
   h1
     @include dark-panel
-    font-size: 1.6em
+    font-size: 1.5em
     padding: $gutter / 2
   form.dark
     @include dark-panel
     padding: $gutter / 2
     input
       @include fill-parent
+      @include dark-input-box-shadow
       border-radius: 4px
       border: none
       background-color: $light_bgc
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) inset
-      font-size: 1.5em
+      font-size: 1.3em
       padding: em(5)
       margin-bottom: em(10)
     button
@@ -87,7 +96,7 @@ section.auth
       @include span-columns(3 of 6)
       @include omega
       float: right
-      height: $column
+      height: em(45)
     .row
       @include clearfix
     .forgot_password
@@ -100,7 +109,7 @@ section.auth
       margin-top: em(15)
     .field_with_errors
       input
-        box-shadow: 0 0 10px #da5a40 inset
+        @include red-input-box-shadow
 
 header.page
   @include outer-container
