@@ -26,12 +26,7 @@ class User < ActiveRecord::Base
   end
 
   def self.reset_password_token_expired?(value)
-    user = find_by_reset_password_token(value)
-    if user.present? && !user.reset_password_token_expires_at.nil?
-      user.reset_password_token_expires_at < Time.now.in_time_zone
-    else
-      false
-    end
+    self.token_expired?(:reset_password_token, value)
   end
 
   def self.load_from_change_email_token(value)
@@ -45,12 +40,7 @@ class User < ActiveRecord::Base
   end
 
   def self.change_email_token_expired?(value)
-    user = find_by_change_email_token(value)
-    if user.present? && !user.change_email_token_expires_at.nil?
-      user.change_email_token_expires_at < Time.now.in_time_zone
-    else
-      false
-    end
+    self.token_expired?(:change_email_token, value)
   end
 
   def admin?
@@ -94,5 +84,21 @@ class User < ActiveRecord::Base
       self.change_email_new_value = nil
       save
     end
+  end
+
+  private
+
+  def self.token_expired?(token, value)
+    expires_at = expires_at_value(
+      self.public_send("find_by_#{token}", value), token)
+    if expires_at.present? && expires_at < Time.now.in_time_zone
+      true
+    else
+      false
+    end
+  end
+
+  def self.expires_at_value(user, token)
+    user.present? ? user.public_send("#{token}_expires_at") : nil
   end
 end
