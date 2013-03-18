@@ -30,7 +30,7 @@ end
 group :test do
   gem 'rb-inotify', '~> 0.9.0'
   gem 'guard-rspec', '~> 2.4.1'
-  gem 'guard-spork', '~> 1.4.2'
+  gem 'guard-spork', '~> 1.5.0'
   gem 'factory_girl_rails', '~> 4.2.1'
   gem 'shoulda-matchers', '~> 1.4.2'
   gem 'forgery', '~> 0.5.0'
