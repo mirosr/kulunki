@@ -25,4 +25,9 @@ describe 'Profile routes' do
     expect(put: '/profile/email/change').to route_to(
       controller: 'profile', action: 'change_email')
   end
+
+  it 'routes to /profile/household/join with put method' do
+    expect(put: '/profile/household/join').to route_to(
+      controller: 'profile', action: 'join_household')
+  end
 end

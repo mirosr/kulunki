@@ -27,6 +27,8 @@ Kulunki::Application.routes.draw do
     as: :profile_change_password
   put 'profile/email/change' => 'profile#change_email',
     as: :profile_change_email
+  put 'profile/household/join' => 'profile#join_household',
+    as: :profile_join_household
 
   # Dashboard
   get 'dashboard' => 'dashboard#show'
