@@ -86,6 +86,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def request_joining_to(household)
+    HouseholdJoinRequest.create(user: self, household: household)
+  end
+
   private
 
   def self.token_expired?(token, value)

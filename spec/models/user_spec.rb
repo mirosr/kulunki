@@ -377,4 +377,15 @@ describe User do
       end
     end
   end
+
+  describe '#request_joining_to' do
+    it 'creates a household join request' do
+      user = build_stubbed(:user)
+      household = build_stubbed(:household)
+      HouseholdJoinRequest.should_receive(:create).with(
+        user: user, household: household).once { true }
+
+      user.request_joining_to(household)
+    end
+  end
 end
