@@ -13,7 +13,7 @@
   - if current_user.household.blank?
     - if @households.present?
       = form_tag profile_join_household_path, method: :put, id: :join_household do
-        = select_tag 'households',
+        = select_tag 'household',
           options_from_collection_for_select(@households, 'id', 'name')
         = button_tag 'Request joining'
     = link_to 'Create New Household', new_household_path

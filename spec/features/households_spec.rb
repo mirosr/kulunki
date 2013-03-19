@@ -75,7 +75,7 @@ feature 'Households' do
     expect(page).to have_text 'Create New Household'
 
     within 'form#join_household' do
-      expect(page).to have_select 'households', with_options: ['My household']
+      expect(page).to have_select 'household', with_options: ['My household']
       expect(page).to have_button 'Request joining'
     end
   end
@@ -87,7 +87,7 @@ feature 'Households' do
 
     expect(current_path).to eq(profile_path)
 
-    select 'My household', from: 'households'
+    select 'My household', from: 'household'
     click_button 'Request joining'
 
     expect(current_path).to eq(profile_path)
