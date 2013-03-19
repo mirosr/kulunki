@@ -66,4 +66,9 @@ FactoryGirl.define do
       end
     end
   end
+
+  factory :household_join_request do
+    association :user, factory: :user, strategy: :build
+    association :household, factory: :household, strategy: :build
+  end
 end
