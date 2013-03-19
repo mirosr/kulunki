@@ -26,6 +26,8 @@ describe HouseholdJoinRequest do
 
       expect(build(:household_join_request)).to be_valid
     end
+
+    it { should ensure_inclusion_of(:status).in_array(%w[pending]) }
   end
 
   describe 'associations' do
