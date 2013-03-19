@@ -10,6 +10,14 @@ describe ProfileController do
       end
     end
 
+    it 'initializes a households variable' do
+      login_user build_stubbed(:user)
+
+      get :show
+
+      expect(assigns(:households)).to be_a(Array)
+    end
+
     it 'renders the :show template' do
       login_user build_stubbed(:user)
 
@@ -271,6 +279,38 @@ describe ProfileController do
 
       it 'sets an alert message' do
         expect(flash[:alert]).not_to be_blank
+      end
+    end
+  end
+
+  describe 'PUT #join_household' do
+    context 'when form params are valid' do
+      it 'requests joining to a household' do
+        current_user = build_stubbed(:user)
+        current_user.stub(:request_joining_to).with('1').once { true }
+        login_user current_user
+
+        put :join_household, household_id: 1
+      end
+
+      it 'redirects to profile url' do
+        current_user = build_stubbed(:user)
+        current_user.stub(:request_joining_to) { true }
+        login_user current_user
+
+        put :join_household
+
+        expect(response).to redirect_to profile_path
+      end
+
+      it 'sets a notice message' do
+        current_user = build_stubbed(:user)
+        current_user.stub(:request_joining_to) { true }
+        login_user current_user
+
+        put :join_household
+
+        expect(flash[:notice]).not_to be_nil
       end
     end
   end

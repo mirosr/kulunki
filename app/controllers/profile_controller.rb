@@ -1,5 +1,6 @@
 class ProfileController < ApplicationController
   def show
+    @households = Household.all
   end
 
   def edit
@@ -37,6 +38,11 @@ class ProfileController < ApplicationController
         end
       end
     end
+  end
+
+  def join_household
+    current_user.request_joining_to(params[:household_id])
+    redirect_to profile_path, notice: 'success'
   end
 
   private
