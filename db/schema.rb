@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130302162746) do
+ActiveRecord::Schema.define(:version => 20130319183449) do
+
+  create_table "household_join_requests", :force => true do |t|
+    t.integer  "user_id",                             :null => false
+    t.integer  "household_id",                        :null => false
+    t.string   "status",       :default => "pending", :null => false
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+  end
+
+  add_index "household_join_requests", ["user_id", "household_id"], :name => "index_household_join_requests_on_user_id_and_household_id"
 
   create_table "households", :force => true do |t|
     t.string   "name",       :null => false
