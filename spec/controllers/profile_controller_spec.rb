@@ -286,14 +286,17 @@ describe ProfileController do
   describe 'PUT #join_household' do
     context 'when form params are valid' do
       it 'requests joining to a household' do
+        household = build_stubbed(:household)
+        Household.should_receive(:find).with('1').once { household }
         current_user = build_stubbed(:user)
-        current_user.stub(:request_joining_to).with('1').once { true }
+        current_user.stub(:request_joining_to).with(household).once { true }
         login_user current_user
 
-        put :join_household, household_id: 1
+        put :join_household, household: 1
       end
 
       it 'redirects to profile url' do
+        Household.stub(:find)
         current_user = build_stubbed(:user)
         current_user.stub(:request_joining_to) { true }
         login_user current_user
@@ -304,6 +307,7 @@ describe ProfileController do
       end
 
       it 'sets a notice message' do
+        Household.stub(:find)
         current_user = build_stubbed(:user)
         current_user.stub(:request_joining_to) { true }
         login_user current_user

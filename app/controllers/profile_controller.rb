@@ -41,8 +41,9 @@ class ProfileController < ApplicationController
   end
 
   def join_household
-    current_user.request_joining_to(params[:household_id])
-    redirect_to profile_path, notice: 'success'
+    household = Household.find(params[:household])
+    current_user.request_joining_to(household)
+    redirect_to profile_path, notice: 'Your request for joining My household was sent for approval'
   end
 
   private
