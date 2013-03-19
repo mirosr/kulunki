@@ -56,4 +56,43 @@ feature 'Households' do
     expect(current_path).to eq(households_path)
     expect(page).to have_text 'The following errors prevent your household of being saved:'
   end
+
+  scenario "The user can't request joining when no housholds exist" do
+    visit_protected profile_path
+
+    expect(current_path).to eq(profile_path)
+    expect(page).not_to have_css '#households'
+    expect(page).not_to have_link 'Request joining'
+    expect(page).to have_text 'Create New Household'
+  end
+
+  scenario 'An user sees the join household form' do
+    create(:household, name: 'My household')
+
+    visit_protected profile_path
+
+    expect(current_path).to eq(profile_path)
+    expect(page).to have_text 'Create New Household'
+
+    within 'form#join_household' do
+      expect(page).to have_select 'households', with_options: ['My household']
+      expect(page).to have_button 'Request joining'
+    end
+  end
+
+  scenario 'The user requests joining to an existing household' do
+    create(:household, name: 'My household')
+
+    visit_protected profile_path
+
+    expect(current_path).to eq(profile_path)
+
+    select 'My household', from: 'households'
+    click_button 'Request joining'
+
+    expect(current_path).to eq(profile_path)
+    expect(page).to have_text('Your request for joining My household was sent for approval')
+    expect(page).to have_text('Pending request for My household')
+    expect(page).not_to have_text 'Create New Household'
+  end
 end
