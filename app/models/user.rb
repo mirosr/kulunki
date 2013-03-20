@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
 
   has_many :co_members, through: :household, source: :members,
     conditions: proc { ['users.id != ?', self.id] }
+  has_one :join_request, class_name: 'HouseholdJoinRequest'
 
   def self.valid_email?(value)
     !!(value =~ /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)
@@ -84,6 +85,10 @@ class User < ActiveRecord::Base
       self.change_email_new_value = nil
       save
     end
+  end
+
+  def pending_join_request?
+    join_request.present? && join_request.pending?
   end
 
   def request_joining_to(household)

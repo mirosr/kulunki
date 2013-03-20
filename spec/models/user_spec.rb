@@ -56,6 +56,8 @@ describe User do
         expect(co_members).to eq(members)
       end
     end
+
+    it { should have_one(:join_request) }
   end
 
   describe '.valid_email?' do
@@ -374,6 +376,32 @@ describe User do
         user.change_email
 
         expect(user.email).to eq('john@example.com')
+      end
+    end
+  end
+
+  describe '#pending_join_request?' do
+    context 'when a household request is present' do
+      context 'when status is pending'do
+        it 'returns true' do
+          user = build(:user_with_pending_join_request)
+
+          expect(user.pending_join_request?).to be_true
+        end
+      end
+
+      context 'when status is not pending' do
+        it 'returns false' do
+          user = build(:user_with_accepted_join_request)
+
+          expect(user.pending_join_request?).to be_false
+        end
+      end
+    end
+
+    context 'when a household request is present' do
+      it 'returns false' do
+        expect(build(:user).pending_join_request?).to be_false
       end
     end
   end

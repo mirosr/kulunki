@@ -49,6 +49,16 @@ FactoryGirl.define do
         user.household.head = user
       end
     end
+
+    factory :user_with_pending_join_request do
+      association :join_request, :pending, factory: :household_join_request,
+        strategy: :build
+    end
+
+    factory :user_with_accepted_join_request do
+      association :join_request, :accepted, factory: :household_join_request,
+        strategy: :build
+    end
   end
 
   factory :household do
@@ -70,5 +80,13 @@ FactoryGirl.define do
   factory :household_join_request do
     association :user, factory: :user, strategy: :build
     association :household, factory: :household, strategy: :build
+
+    trait :pending do
+      status 'pending'
+    end
+
+    trait :accepted do
+      status 'accepted'
+    end
   end
 end
