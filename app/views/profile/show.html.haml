@@ -11,12 +11,14 @@
 %p
   = "Household: #{household_name}"
   - if current_user.household.blank?
-    - if @households.present?
+    - if current_user.pending_join_request?
+      %span= "Pending request for #{current_user.join_request.household.name}"
+    - else
       = form_tag profile_join_household_path, method: :put, id: :join_household do
         = select_tag 'household',
           options_from_collection_for_select(@households, 'id', 'name')
         = button_tag 'Request joining'
-    = link_to 'Create New Household', new_household_path
+      = link_to 'Create New Household', new_household_path
 %p= "Co-members: #{co_members_list}"
 
 = link_to 'Edit', edit_profile_path

@@ -94,5 +94,6 @@ feature 'Households' do
     expect(page).to have_text('Your request for joining My household was sent for approval')
     expect(page).to have_text('Pending request for My household')
     expect(page).not_to have_text 'Create New Household'
+    expect(page).not_to have_css 'form#join_household'
   end
 end
