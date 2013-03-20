@@ -27,11 +27,25 @@ describe HouseholdJoinRequest do
       expect(build(:household_join_request)).to be_valid
     end
 
-    it { should ensure_inclusion_of(:status).in_array(%w[pending]) }
+    it { should ensure_inclusion_of(:status).in_array(%w[pending accepted]) }
   end
 
   describe 'associations' do
     it { should belong_to(:user) }
     it { should belong_to(:household) }
+  end
+
+  describe '#pending?' do
+    context 'when status is pending' do
+      it 'returns true' do
+        expect(build(:household_join_request, :pending)).to be_pending
+      end
+    end
+
+    context 'when status in not pending' do
+      it 'returns false' do
+        expect(build(:household_join_request, :accepted)).not_to be_pending
+      end
+    end
   end
 end
